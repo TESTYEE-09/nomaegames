@@ -50,12 +50,23 @@
             <div class="scanline"></div>
           </div>
           <div class="hero-copy">
-            <p class="eyebrow">Browser arcade hub</p>
+            <p class="eyebrow">HTML game hub</p>
             <h1 id="page-title">Nomae Games</h1>
             <p>
-              Fast HTML games, public rooms, score races, and lightweight
-              multiplayer sessions that can run from a free static host.
+              A clean glass arcade for fast browser games, friend rooms, and
+              score races that can run from a free static host.
             </p>
+            <form class="interest-capture" id="quick-room-form">
+              <span>Start a room</span>
+              <input
+                type="text"
+                id="quick-player-name"
+                maxlength="18"
+                value="Nomae"
+                aria-label="Player name"
+              />
+              <button type="button" id="quick-create-room">Create</button>
+            </form>
             <div class="hero-stats" aria-label="Hub stats">
               <span><strong>3</strong> games</span>
               <span><strong>1-click</strong> rooms</span>

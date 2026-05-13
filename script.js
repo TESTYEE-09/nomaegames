@@ -2,9 +2,12 @@ const toast = document.querySelector(".toast");
 const scoreList = document.querySelector(".score-list");
 const buttons = document.querySelectorAll(".play-button");
 const roomForm = document.querySelector("#room-form");
+const quickRoomForm = document.querySelector("#quick-room-form");
+const quickCreateRoomButton = document.querySelector("#quick-create-room");
 const joinRoomButton = document.querySelector("#join-room");
 const gameSelect = document.querySelector("#game-select");
 const playerNameInput = document.querySelector("#player-name");
+const quickPlayerNameInput = document.querySelector("#quick-player-name");
 const roomCode = document.querySelector("#room-code");
 const roomGame = document.querySelector("#room-game");
 const playerList = document.querySelector("#player-list");
@@ -49,6 +52,11 @@ const renderRoom = () => {
 };
 
 const createRoom = (gameName, playerName) => {
+  if (playerName) {
+    playerNameInput.value = playerName;
+    quickPlayerNameInput.value = playerName;
+  }
+
   activeRoom = {
     code: roomId(),
     game: gameName,
@@ -91,6 +99,17 @@ buttons.forEach((button) => {
 roomForm.addEventListener("submit", (event) => {
   event.preventDefault();
   createRoom(gameSelect.value, playerNameInput.value.trim());
+});
+
+quickRoomForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  createRoom(gameSelect.value, quickPlayerNameInput.value.trim());
+  document.querySelector("#lobby").scrollIntoView({ behavior: "smooth" });
+});
+
+quickCreateRoomButton.addEventListener("click", () => {
+  createRoom(gameSelect.value, quickPlayerNameInput.value.trim());
+  document.querySelector("#lobby").scrollIntoView({ behavior: "smooth" });
 });
 
 joinRoomButton.addEventListener("click", joinLocalRoom);
