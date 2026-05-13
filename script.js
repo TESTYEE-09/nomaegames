@@ -1,6 +1,8 @@
 const toast = document.querySelector(".toast");
 const scoreList = document.querySelector(".score-list");
 const buttons = document.querySelectorAll(".play-button");
+const categoryButtons = document.querySelectorAll(".category-pill");
+const miniGames = document.querySelectorAll(".mini-game");
 const roomForm = document.querySelector("#room-form");
 const quickRoomForm = document.querySelector("#quick-room-form");
 const quickCreateRoomButton = document.querySelector("#quick-create-room");
@@ -93,6 +95,30 @@ buttons.forEach((button) => {
 
     addScore(gameName);
     showToast(`${gameName} solo run added to the score board.`);
+  });
+});
+
+categoryButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const filter = button.dataset.filter;
+    categoryButtons.forEach((item) => item.classList.remove("is-active"));
+    button.classList.add("is-active");
+
+    miniGames.forEach((game) => {
+      const categories = game.dataset.category || "";
+      game.hidden = filter !== "all" && !categories.includes(filter);
+    });
+  });
+});
+
+miniGames.forEach((game) => {
+  game.addEventListener("click", () => {
+    const gameName = game.dataset.game;
+    gameSelect.value = ["Face Rating Arena", "Reaction Dash", "Memory Grid"].includes(gameName)
+      ? gameName
+      : "Reaction Dash";
+    addScore(gameName);
+    showToast(`${gameName} queued for quick play.`);
   });
 });
 

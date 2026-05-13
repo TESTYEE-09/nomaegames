@@ -11,6 +11,8 @@
   --gold: #f4b74a;
   --green: #98e8bd;
   --blue: #9ab8ff;
+  --pink: #ff7ab8;
+  --orange: #ff9f45;
   --glass: rgba(255, 255, 255, 0.08);
   --shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
   --glow: 0 18px 80px rgba(255, 255, 255, 0.08);
@@ -176,7 +178,7 @@ button {
 .hero {
   position: relative;
   display: grid;
-  min-height: clamp(560px, 78vh, 760px);
+  min-height: clamp(500px, 68vh, 680px);
   align-items: end;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -338,7 +340,7 @@ p {
 h1 {
   max-width: 7.8ch;
   margin-bottom: 18px;
-  font-size: clamp(4rem, 15vw, 9.4rem);
+  font-size: clamp(3.6rem, 13vw, 8.4rem);
   line-height: 0.9;
   letter-spacing: 0;
 }
@@ -469,6 +471,7 @@ h1 {
 .section,
 .score-section,
 .lobby-section,
+.category-section,
 .updates {
   padding: 74px 0 0;
 }
@@ -496,13 +499,82 @@ h2 {
 
 .game-grid {
   display: grid;
-  grid-template-columns: 1.25fr repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+}
+
+.featured-strip {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.spotlight-card {
+  position: relative;
+  min-height: 245px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(152, 232, 189, 0.26), transparent 15rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05)),
+    rgba(12, 13, 13, 0.68);
+  padding: 26px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.spotlight-card::after {
+  position: absolute;
+  right: -48px;
+  bottom: -70px;
+  width: 210px;
+  height: 210px;
+  border: 18px solid rgba(255, 255, 255, 0.14);
+  border-radius: 34px;
+  content: "";
+  transform: rotate(18deg);
+}
+
+.spotlight-card.orange {
+  background:
+    radial-gradient(circle at 82% 20%, rgba(255, 159, 69, 0.28), transparent 14rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05)),
+    rgba(12, 13, 13, 0.68);
+}
+
+.spotlight-card h3 {
+  max-width: 12ch;
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.95;
+}
+
+.spotlight-card p {
+  max-width: 460px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.game-badge {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  margin-bottom: 16px;
+  padding: 0 10px;
+  text-transform: uppercase;
 }
 
 .game-card {
   display: flex;
-  min-height: 310px;
+  min-height: 360px;
   flex-direction: column;
   justify-content: space-between;
   gap: 24px;
@@ -535,6 +607,38 @@ h2 {
   font-size: 1.55rem;
 }
 
+.game-art {
+  display: grid;
+  min-height: 124px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.3), transparent 24%),
+    linear-gradient(135deg, rgba(152, 232, 189, 0.55), rgba(154, 184, 255, 0.28));
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.16);
+}
+
+.game-art span {
+  color: #050505;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 2.35rem;
+  font-weight: 900;
+}
+
+.dash-art {
+  background:
+    radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.3), transparent 24%),
+    linear-gradient(135deg, rgba(255, 159, 69, 0.65), rgba(255, 122, 184, 0.3));
+}
+
+.grid-art {
+  background:
+    radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(135deg, rgba(154, 184, 255, 0.7), rgba(246, 239, 229, 0.28));
+}
+
 .game-card p:not(.game-kicker),
 .updates p,
 .hosting-grid p {
@@ -564,6 +668,118 @@ h2 {
   display: grid;
   grid-template-columns: minmax(280px, 0.8fr) minmax(320px, 1.2fr);
   gap: 16px;
+}
+
+.category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.category-pill {
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 0 16px;
+  text-transform: uppercase;
+}
+
+.category-pill.is-active,
+.category-pill:hover {
+  background: #fff;
+  color: #050505;
+}
+
+.mini-game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.mini-game {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  min-height: 84px;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045)),
+    rgba(12, 13, 13, 0.58);
+  color: var(--text);
+  cursor: pointer;
+  padding: 10px;
+  text-align: left;
+  backdrop-filter: blur(16px);
+}
+
+.mini-game:hover {
+  border-color: rgba(255, 255, 255, 0.34);
+  transform: translateY(-2px);
+}
+
+.mini-game[hidden] {
+  display: none;
+}
+
+.mini-icon {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  color: #050505;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 900;
+}
+
+.mini-icon.warm {
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+}
+
+.mini-icon.cool {
+  background: linear-gradient(135deg, var(--blue), var(--cream));
+}
+
+.mini-icon.pink {
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+}
+
+.mini-icon.gold {
+  background: linear-gradient(135deg, var(--gold), var(--cream));
+}
+
+.mini-icon.green {
+  background: linear-gradient(135deg, var(--green), var(--cream));
+}
+
+.mini-icon.blue {
+  background: linear-gradient(135deg, var(--blue), var(--pink));
+}
+
+.mini-game strong,
+.mini-game small {
+  display: block;
+}
+
+.mini-game strong {
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.mini-game small {
+  color: var(--muted);
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .lobby-panel,
@@ -836,6 +1052,11 @@ h2 {
   }
 
   .game-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-strip,
+  .mini-game-grid {
     grid-template-columns: 1fr;
   }
 

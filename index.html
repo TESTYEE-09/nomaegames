@@ -30,6 +30,7 @@
         </a>
         <nav class="nav-links" aria-label="Sections">
           <a href="#games">Games</a>
+          <a href="#categories">Categories</a>
           <a href="#lobby">Multiplayer</a>
           <a href="#scoreboard">Scores</a>
           <a href="#updates">Updates</a>
@@ -53,8 +54,8 @@
             <p class="eyebrow">HTML game hub</p>
             <h1 id="page-title">Nomae Games</h1>
             <p>
-              A clean glass arcade for fast browser games, friend rooms, and
-              score races that can run from a free static host.
+              A browser arcade for quick games, score chasing, and friend rooms.
+              Pick a tile, start playing, or make a room in seconds.
             </p>
             <form class="interest-capture" id="quick-room-form">
               <span>Start a room</span>
@@ -68,9 +69,9 @@
               <button type="button" id="quick-create-room">Create</button>
             </form>
             <div class="hero-stats" aria-label="Hub stats">
-              <span><strong>3</strong> games</span>
+              <span><strong>12</strong> games</span>
               <span><strong>1-click</strong> rooms</span>
-              <span><strong>free</strong> hosting</span>
+              <span><strong>no install</strong></span>
             </div>
             <div class="hero-actions">
               <a class="button primary" href="#games">Browse games</a>
@@ -82,16 +83,35 @@
         <section class="section" id="games" aria-labelledby="games-title">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Library</p>
-              <h2 id="games-title">HTML games hub</h2>
+              <p class="eyebrow">Play now</p>
+              <h2 id="games-title">Featured games</h2>
             </div>
             <p class="section-note">
-              Each card is wired to the lobby so players can launch solo or
-              create a shared room for friends.
+              Built like a real game hub: featured picks up top, quick categories,
+              and tiles that can launch solo or turn into friend rooms.
             </p>
+          </div>
+          <div class="featured-strip" aria-label="Featured game shelves">
+            <article class="spotlight-card">
+              <span class="game-badge">Top pick</span>
+              <h3>Face Rating Arena</h3>
+              <p>Party-score chaos with face tracking, fast rounds, and a live board.</p>
+              <button class="play-button" type="button" data-action="room" data-game="Face Rating Arena">
+                Start room
+              </button>
+            </article>
+            <article class="spotlight-card orange">
+              <span class="game-badge">New</span>
+              <h3>Reaction Dash</h3>
+              <p>Wait for the signal, hit the window, and race friends for the fastest tap.</p>
+              <button class="play-button" type="button" data-action="solo" data-game="Reaction Dash">
+                Quick play
+              </button>
+            </article>
           </div>
           <div class="game-grid">
             <article class="game-card featured">
+              <div class="game-art face-art" aria-hidden="true"><span>98</span></div>
               <div>
                 <p class="game-kicker">Multiplayer ready</p>
                 <h3>Face Rating Arena</h3>
@@ -110,6 +130,7 @@
               </div>
             </article>
             <article class="game-card">
+              <div class="game-art dash-art" aria-hidden="true"><span>GO</span></div>
               <div>
                 <p class="game-kicker">Realtime race</p>
                 <h3>Reaction Dash</h3>
@@ -125,6 +146,7 @@
               </div>
             </article>
             <article class="game-card">
+              <div class="game-art grid-art" aria-hidden="true"><span>4x4</span></div>
               <div>
                 <p class="game-kicker">Turn based</p>
                 <h3>Memory Grid</h3>
@@ -139,6 +161,69 @@
                 </button>
               </div>
             </article>
+          </div>
+        </section>
+
+        <section class="category-section" id="categories" aria-labelledby="categories-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Browse</p>
+              <h2 id="categories-title">Find a game fast</h2>
+            </div>
+          </div>
+          <div class="category-pills" aria-label="Game categories">
+            <button class="category-pill is-active" type="button" data-filter="all">All</button>
+            <button class="category-pill" type="button" data-filter="multiplayer">Multiplayer</button>
+            <button class="category-pill" type="button" data-filter="skill">Skill</button>
+            <button class="category-pill" type="button" data-filter="puzzle">Puzzle</button>
+            <button class="category-pill" type="button" data-filter="quick">Quick play</button>
+          </div>
+          <div class="mini-game-grid" id="mini-game-grid">
+            <button class="mini-game" type="button" data-category="multiplayer skill" data-game="Face Rating Arena">
+              <span class="mini-icon">FR</span>
+              <strong>Face Rating Arena</strong>
+              <small>Multiplayer</small>
+            </button>
+            <button class="mini-game" type="button" data-category="skill quick" data-game="Reaction Dash">
+              <span class="mini-icon warm">RD</span>
+              <strong>Reaction Dash</strong>
+              <small>Skill</small>
+            </button>
+            <button class="mini-game" type="button" data-category="puzzle quick" data-game="Memory Grid">
+              <span class="mini-icon cool">MG</span>
+              <strong>Memory Grid</strong>
+              <small>Puzzle</small>
+            </button>
+            <button class="mini-game" type="button" data-category="quick skill" data-game="Neon Slice">
+              <span class="mini-icon pink">NS</span>
+              <strong>Neon Slice</strong>
+              <small>Quick play</small>
+            </button>
+            <button class="mini-game" type="button" data-category="puzzle" data-game="Number Stack">
+              <span class="mini-icon gold">#</span>
+              <strong>Number Stack</strong>
+              <small>Puzzle</small>
+            </button>
+            <button class="mini-game" type="button" data-category="multiplayer quick" data-game="Lobby Pong">
+              <span class="mini-icon green">LP</span>
+              <strong>Lobby Pong</strong>
+              <small>Multiplayer</small>
+            </button>
+            <button class="mini-game" type="button" data-category="skill" data-game="Orbit Runner">
+              <span class="mini-icon blue">OR</span>
+              <strong>Orbit Runner</strong>
+              <small>Skill</small>
+            </button>
+            <button class="mini-game" type="button" data-category="puzzle multiplayer" data-game="Word Rush">
+              <span class="mini-icon">WR</span>
+              <strong>Word Rush</strong>
+              <small>Party</small>
+            </button>
+            <button class="mini-game" type="button" data-category="quick" data-game="Click Storm">
+              <span class="mini-icon warm">CS</span>
+              <strong>Click Storm</strong>
+              <small>Quick play</small>
+            </button>
           </div>
         </section>
 
