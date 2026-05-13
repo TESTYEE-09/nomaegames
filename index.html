@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="liquid-scene" aria-hidden="true">
+      <span class="liquid-veil veil-one"></span>
+      <span class="liquid-veil veil-two"></span>
+      <span class="liquid-veil veil-three"></span>
+    </div>
     <div class="shell">
       <header class="topbar" aria-label="Primary">
         <a class="brand" href="#" aria-label="Nomae Games home">
@@ -25,6 +30,7 @@
         </a>
         <nav class="nav-links" aria-label="Sections">
           <a href="#games">Games</a>
+          <a href="#lobby">Multiplayer</a>
           <a href="#scoreboard">Scores</a>
           <a href="#updates">Updates</a>
         </nav>
@@ -34,6 +40,10 @@
         <section class="hero" aria-labelledby="page-title">
           <div class="hero-visual" aria-hidden="true">
             <div class="grid-field"></div>
+            <div class="glass-orbit orbit-one"></div>
+            <div class="glass-orbit orbit-two"></div>
+            <div class="glass-panel panel-one"></div>
+            <div class="glass-panel panel-two"></div>
             <div class="player-token token-one"></div>
             <div class="player-token token-two"></div>
             <div class="player-token token-three"></div>
@@ -43,62 +53,153 @@
             <p class="eyebrow">Browser arcade hub</p>
             <h1 id="page-title">Nomae Games</h1>
             <p>
-              Fast, polished web games built for quick sessions, visible scores,
-              and experiments that can ship without heavy setup.
+              Fast HTML games, public rooms, score races, and lightweight
+              multiplayer sessions that can run from a free static host.
             </p>
+            <div class="hero-stats" aria-label="Hub stats">
+              <span><strong>3</strong> games</span>
+              <span><strong>1-click</strong> rooms</span>
+              <span><strong>free</strong> hosting</span>
+            </div>
             <div class="hero-actions">
-              <a class="button primary" href="#games">Play games</a>
-              <a class="button secondary" href="#scoreboard">View scores</a>
+              <a class="button primary" href="#games">Browse games</a>
+              <a class="button secondary" href="#lobby">Create room</a>
             </div>
           </div>
         </section>
 
         <section class="section" id="games" aria-labelledby="games-title">
           <div class="section-heading">
-            <p class="eyebrow">Library</p>
-            <h2 id="games-title">Ready for the first drops</h2>
+            <div>
+              <p class="eyebrow">Library</p>
+              <h2 id="games-title">HTML games hub</h2>
+            </div>
+            <p class="section-note">
+              Each card is wired to the lobby so players can launch solo or
+              create a shared room for friends.
+            </p>
           </div>
           <div class="game-grid">
             <article class="game-card featured">
               <div>
-                <p class="game-kicker">Featured</p>
+                <p class="game-kicker">Multiplayer ready</p>
                 <h3>Face Rating Arena</h3>
                 <p>
                   A score-chasing face analysis game with visible feedback,
                   leaderboard hooks, and quick party-session energy.
                 </p>
               </div>
-              <button class="play-button" type="button" data-game="Face Rating Arena">
-                Launch
-              </button>
+              <div class="card-actions">
+                <button class="play-button" type="button" data-action="solo" data-game="Face Rating Arena">
+                  Solo
+                </button>
+                <button class="play-button outline" type="button" data-action="room" data-game="Face Rating Arena">
+                  Room
+                </button>
+              </div>
             </article>
             <article class="game-card">
               <div>
-                <p class="game-kicker">Prototype</p>
+                <p class="game-kicker">Realtime race</p>
                 <h3>Reaction Dash</h3>
                 <p>Tap the signal, avoid fake-outs, and climb the weekly speed board.</p>
               </div>
-              <button class="play-button" type="button" data-game="Reaction Dash">
-                Queue
-              </button>
+              <div class="card-actions">
+                <button class="play-button" type="button" data-action="solo" data-game="Reaction Dash">
+                  Solo
+                </button>
+                <button class="play-button outline" type="button" data-action="room" data-game="Reaction Dash">
+                  Room
+                </button>
+              </div>
             </article>
             <article class="game-card">
               <div>
-                <p class="game-kicker">Prototype</p>
+                <p class="game-kicker">Turn based</p>
                 <h3>Memory Grid</h3>
                 <p>Pattern recall rounds tuned for short mobile-friendly sessions.</p>
               </div>
-              <button class="play-button" type="button" data-game="Memory Grid">
-                Queue
-              </button>
+              <div class="card-actions">
+                <button class="play-button" type="button" data-action="solo" data-game="Memory Grid">
+                  Solo
+                </button>
+                <button class="play-button outline" type="button" data-action="room" data-game="Memory Grid">
+                  Room
+                </button>
+              </div>
             </article>
+          </div>
+        </section>
+
+        <section class="lobby-section" id="lobby" aria-labelledby="lobby-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Multiplayer</p>
+              <h2 id="lobby-title">Room lobby</h2>
+            </div>
+            <p class="section-note">
+              Local simulation today, Firebase Realtime Database next for live
+              rooms, presence, and shared scores.
+            </p>
+          </div>
+
+          <div class="lobby-layout">
+            <form class="lobby-panel" id="room-form">
+              <label for="player-name">Player name</label>
+              <input id="player-name" name="playerName" maxlength="18" value="Nomae" />
+
+              <label for="game-select">Game</label>
+              <select id="game-select" name="game">
+                <option>Face Rating Arena</option>
+                <option>Reaction Dash</option>
+                <option>Memory Grid</option>
+              </select>
+
+              <div class="room-row">
+                <button class="button primary" type="submit">Create room</button>
+                <button class="button secondary" type="button" id="join-room">Join test room</button>
+              </div>
+            </form>
+
+            <div class="room-card" aria-live="polite">
+              <div class="room-header">
+                <div>
+                  <p class="eyebrow">Active room</p>
+                  <h3 id="room-code">NO ROOM</h3>
+                </div>
+                <span class="room-status">Local</span>
+              </div>
+              <dl class="room-meta">
+                <div>
+                  <dt>Game</dt>
+                  <dd id="room-game">Pick a game</dd>
+                </div>
+                <div>
+                  <dt>Mode</dt>
+                  <dd>Public code</dd>
+                </div>
+                <div>
+                  <dt>Backend</dt>
+                  <dd>Firebase ready</dd>
+                </div>
+              </dl>
+              <div class="player-list" id="player-list">
+                <span class="empty-state">Create a room to add players.</span>
+              </div>
+            </div>
           </div>
         </section>
 
         <section class="score-section" id="scoreboard" aria-labelledby="score-title">
           <div class="section-heading">
-            <p class="eyebrow">Scores</p>
-            <h2 id="score-title">Local test board</h2>
+            <div>
+              <p class="eyebrow">Scores</p>
+              <h2 id="score-title">Live board surface</h2>
+            </div>
+            <p class="section-note">
+              Scores can stay local for prototypes, then sync to Firebase when a
+              game is ready for public multiplayer.
+            </p>
           </div>
           <ol class="score-list" aria-live="polite">
             <li><span>Ava</span><strong>9820</strong></li>
@@ -109,14 +210,25 @@
 
         <section class="updates" id="updates" aria-labelledby="updates-title">
           <div class="section-heading">
-            <p class="eyebrow">Build status</p>
-            <h2 id="updates-title">Static setup complete</h2>
+            <div>
+              <p class="eyebrow">Hosting</p>
+              <h2 id="updates-title">Free deploy path</h2>
+            </div>
           </div>
-          <p>
-            This repo is ready for GitHub Pages, Netlify, Vercel, Cloudflare
-            Pages, or any basic static host. Add real game routes as separate
-            folders or swap this shell into a framework when the app grows.
-          </p>
+          <div class="hosting-grid">
+            <article>
+              <h3>Best simple site host</h3>
+              <p>GitHub Pages. It is free, perfect for plain HTML games, and can publish straight from this repository.</p>
+            </article>
+            <article>
+              <h3>Best multiplayer backend</h3>
+              <p>Firebase Spark plan. Use Authentication anonymously plus Realtime Database for rooms, presence, and score sync.</p>
+            </article>
+            <article>
+              <h3>Best upgrade path</h3>
+              <p>Cloudflare Pages plus Durable Objects when you need lower-latency authoritative game servers later.</p>
+            </article>
+          </div>
         </section>
       </main>
     </div>
