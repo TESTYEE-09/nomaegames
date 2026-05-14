@@ -1,18 +1,12 @@
 const toast = document.querySelector(".toast");
 const scoreList = document.querySelector(".score-list");
-const buttons = document.querySelectorAll(".play-button");
-const categoryButtons = document.querySelectorAll(".category-pill");
-const miniGames = document.querySelectorAll(".mini-game");
+const buttons = document.querySelectorAll("[data-game]");
 const arcadeTabs = document.querySelectorAll(".arcade-tab");
 const gamePanels = document.querySelectorAll("[data-game-panel]");
 const activeGameTitle = document.querySelector("#active-game-title");
 const roomForm = document.querySelector("#room-form");
-const quickRoomForm = document.querySelector("#quick-room-form");
-const quickCreateRoomButton = document.querySelector("#quick-create-room");
-const joinRoomButton = document.querySelector("#join-room");
 const gameSelect = document.querySelector("#game-select");
 const playerNameInput = document.querySelector("#player-name");
-const quickPlayerNameInput = document.querySelector("#quick-player-name");
 const roomCode = document.querySelector("#room-code");
 const roomGame = document.querySelector("#room-game");
 const playerList = document.querySelector("#player-list");
@@ -88,10 +82,7 @@ const renderRoom = () => {
 };
 
 const createRoom = (gameName, playerName) => {
-  if (playerName) {
-    playerNameInput.value = playerName;
-    quickPlayerNameInput.value = playerName;
-  }
+  if (playerName) playerNameInput.value = playerName;
 
   activeRoom = {
     code: roomId(),
@@ -101,18 +92,6 @@ const createRoom = (gameName, playerName) => {
 
   renderRoom();
   showToast(`Room ${activeRoom.code} created for ${gameName}.`);
-};
-
-const joinLocalRoom = () => {
-  if (!activeRoom) {
-    createRoom(gameSelect.value, playerNameInput.value.trim());
-  }
-
-  const guestNumber = activeRoom.players.length + 1;
-  activeRoom.players.push(`Guest ${guestNumber}`);
-  renderRoom();
-  addScore(activeRoom.game);
-  showToast(`Guest ${guestNumber} joined ${activeRoom.code}.`);
 };
 
 buttons.forEach((button) => {
@@ -134,30 +113,6 @@ buttons.forEach((button) => {
 
 arcadeTabs.forEach((tab) => {
   tab.addEventListener("click", () => openGame(tab.dataset.openGame));
-});
-
-categoryButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
-    categoryButtons.forEach((item) => item.classList.remove("is-active"));
-    button.classList.add("is-active");
-
-    miniGames.forEach((game) => {
-      const categories = game.dataset.category || "";
-      game.hidden = filter !== "all" && !categories.includes(filter);
-    });
-  });
-});
-
-miniGames.forEach((game) => {
-  game.addEventListener("click", () => {
-    const gameName = game.dataset.game;
-    gameSelect.value = ["Click Storm", "Reaction Dash", "Memory Grid"].includes(gameName)
-      ? gameName
-      : "Reaction Dash";
-    openGame(["Reaction Dash", "Memory Grid", "Click Storm"].includes(gameName) ? gameName : "Click Storm");
-    showToast(`${gameName} opened in the arcade.`);
-  });
 });
 
 const startReaction = () => {
@@ -293,16 +248,3 @@ roomForm.addEventListener("submit", (event) => {
   event.preventDefault();
   createRoom(gameSelect.value, playerNameInput.value.trim());
 });
-
-quickRoomForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  createRoom(gameSelect.value, quickPlayerNameInput.value.trim());
-  document.querySelector("#lobby").scrollIntoView({ behavior: "smooth" });
-});
-
-quickCreateRoomButton.addEventListener("click", () => {
-  createRoom(gameSelect.value, quickPlayerNameInput.value.trim());
-  document.querySelector("#lobby").scrollIntoView({ behavior: "smooth" });
-});
-
-joinRoomButton.addEventListener("click", joinLocalRoom);

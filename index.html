@@ -3,19 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Nomae Games is a focused arcade hub for quick web games, score chasing, and lightweight multiplayer experiments."
-    />
+    <meta name="description" content="Nomae Games is a fast HTML game hub." />
     <title>Nomae Games</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="liquid-scene" aria-hidden="true">
-      <span class="liquid-veil veil-one"></span>
-      <span class="liquid-veil veil-two"></span>
-      <span class="liquid-veil veil-three"></span>
-    </div>
     <div class="shell">
       <header class="topbar" aria-label="Primary">
         <a class="brand" href="#" aria-label="Nomae Games home">
@@ -24,200 +16,57 @@
         </a>
         <nav class="nav-links" aria-label="Sections">
           <a href="#games">Games</a>
-          <a href="#categories">Categories</a>
-          <a href="#lobby">Multiplayer</a>
+          <a href="#play">Play</a>
+          <a href="#lobby">Lobby</a>
           <a href="#scoreboard">Scores</a>
-          <a href="#updates">Updates</a>
         </nav>
       </header>
 
       <main>
         <section class="hero" aria-labelledby="page-title">
-          <div class="hero-visual" aria-hidden="true">
-            <div class="grid-field"></div>
-            <div class="glass-orbit orbit-one"></div>
-            <div class="glass-orbit orbit-two"></div>
-            <div class="glass-panel panel-one"></div>
-            <div class="glass-panel panel-two"></div>
-            <div class="player-token token-one"></div>
-            <div class="player-token token-two"></div>
-            <div class="player-token token-three"></div>
-            <div class="scanline"></div>
-          </div>
-          <div class="hero-copy">
-            <p class="eyebrow">HTML game hub</p>
-            <h1 id="page-title">Nomae Games</h1>
-            <p>
-              A browser arcade for quick games, score chasing, and friend rooms.
-              Pick a tile, start playing, or make a room in seconds.
-            </p>
-            <form class="interest-capture" id="quick-room-form">
-              <span>Start a room</span>
-              <input
-                type="text"
-                id="quick-player-name"
-                maxlength="18"
-                value="Nomae"
-                aria-label="Player name"
-              />
-              <button type="button" id="quick-create-room">Create</button>
-            </form>
-            <div class="hero-stats" aria-label="Hub stats">
-              <span><strong>12</strong> games</span>
-              <span><strong>1-click</strong> rooms</span>
-              <span><strong>no install</strong></span>
-            </div>
-            <div class="hero-actions">
-              <a class="button primary" href="#games">Browse games</a>
-              <a class="button secondary" href="#lobby">Create room</a>
-            </div>
-          </div>
+          <p class="eyebrow">HTML arcade</p>
+          <h1 id="page-title">Nomae Games</h1>
+          <p>Quick browser games. No install. No account.</p>
+          <a class="button primary" href="#games">Play now</a>
         </section>
 
         <section class="section" id="games" aria-labelledby="games-title">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Play now</p>
-              <h2 id="games-title">Featured games</h2>
+              <p class="eyebrow">Games</p>
+              <h2 id="games-title">Choose one</h2>
             </div>
-            <p class="section-note">
-              Built like a real game hub: featured picks up top, quick categories,
-              and tiles that can launch solo or turn into friend rooms.
-            </p>
-          </div>
-          <div class="featured-strip" aria-label="Featured game shelves">
-            <article class="spotlight-card">
-              <span class="game-badge">Top pick</span>
-              <h3>Click Storm</h3>
-              <p>Fast target tapping, short rounds, and instant score chasing.</p>
-              <button class="play-button" type="button" data-action="room" data-game="Click Storm">
-                Start room
-              </button>
-            </article>
-            <article class="spotlight-card orange">
-              <span class="game-badge">New</span>
-              <h3>Reaction Dash</h3>
-              <p>Wait for the signal, hit the window, and race friends for the fastest tap.</p>
-              <button class="play-button" type="button" data-action="solo" data-game="Reaction Dash">
-                Quick play
-              </button>
-            </article>
           </div>
           <div class="game-grid">
-            <article class="game-card featured">
-              <div class="game-art face-art" aria-hidden="true"><span>98</span></div>
-              <div>
-                <p class="game-kicker">Multiplayer ready</p>
-                <h3>Click Storm</h3>
-                <p>
-                  A 15-second target chase with moving buttons, quick restarts,
-                  and score-board pressure.
-                </p>
-              </div>
+            <article class="game-card">
+              <div class="game-art click-art" aria-hidden="true"><span>+</span></div>
+              <h3>Click Storm</h3>
+              <p>Hit the target for 15 seconds.</p>
               <div class="card-actions">
-                <button class="play-button" type="button" data-action="solo" data-game="Click Storm">
-                  Play
-                </button>
-                <button class="play-button outline" type="button" data-action="room" data-game="Click Storm">
-                  Room
-                </button>
+                <button class="play-button" type="button" data-action="solo" data-game="Click Storm">Play</button>
+                <button class="play-button outline" type="button" data-action="room" data-game="Click Storm">Room</button>
               </div>
             </article>
+
             <article class="game-card">
               <div class="game-art dash-art" aria-hidden="true"><span>GO</span></div>
-              <div>
-                <p class="game-kicker">Realtime race</p>
-                <h3>Reaction Dash</h3>
-                <p>Tap the signal, avoid fake-outs, and climb the weekly speed board.</p>
-              </div>
+              <h3>Reaction Dash</h3>
+              <p>Wait for green, then tap.</p>
               <div class="card-actions">
-                <button class="play-button" type="button" data-action="solo" data-game="Reaction Dash">
-                  Play
-                </button>
-                <button class="play-button outline" type="button" data-action="room" data-game="Reaction Dash">
-                  Room
-                </button>
+                <button class="play-button" type="button" data-action="solo" data-game="Reaction Dash">Play</button>
+                <button class="play-button outline" type="button" data-action="room" data-game="Reaction Dash">Room</button>
               </div>
             </article>
-            <article class="game-card">
-              <div class="game-art grid-art" aria-hidden="true"><span>4x4</span></div>
-              <div>
-                <p class="game-kicker">Turn based</p>
-                <h3>Memory Grid</h3>
-                <p>Pattern recall rounds tuned for short mobile-friendly sessions.</p>
-              </div>
-              <div class="card-actions">
-                <button class="play-button" type="button" data-action="solo" data-game="Memory Grid">
-                  Play
-                </button>
-                <button class="play-button outline" type="button" data-action="room" data-game="Memory Grid">
-                  Room
-                </button>
-              </div>
-            </article>
-          </div>
-        </section>
 
-        <section class="category-section" id="categories" aria-labelledby="categories-title">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Browse</p>
-              <h2 id="categories-title">Find a game fast</h2>
-            </div>
-          </div>
-          <div class="category-pills" aria-label="Game categories">
-            <button class="category-pill is-active" type="button" data-filter="all">All</button>
-            <button class="category-pill" type="button" data-filter="multiplayer">Multiplayer</button>
-            <button class="category-pill" type="button" data-filter="skill">Skill</button>
-            <button class="category-pill" type="button" data-filter="puzzle">Puzzle</button>
-            <button class="category-pill" type="button" data-filter="quick">Quick play</button>
-          </div>
-          <div class="mini-game-grid" id="mini-game-grid">
-            <button class="mini-game" type="button" data-category="multiplayer skill quick" data-game="Click Storm">
-              <span class="mini-icon">CS</span>
-              <strong>Click Storm</strong>
-              <small>Multiplayer</small>
-            </button>
-            <button class="mini-game" type="button" data-category="skill quick" data-game="Reaction Dash">
-              <span class="mini-icon warm">RD</span>
-              <strong>Reaction Dash</strong>
-              <small>Skill</small>
-            </button>
-            <button class="mini-game" type="button" data-category="puzzle quick" data-game="Memory Grid">
-              <span class="mini-icon cool">MG</span>
-              <strong>Memory Grid</strong>
-              <small>Puzzle</small>
-            </button>
-            <button class="mini-game" type="button" data-category="quick skill" data-game="Neon Slice">
-              <span class="mini-icon pink">NS</span>
-              <strong>Neon Slice</strong>
-              <small>Quick play</small>
-            </button>
-            <button class="mini-game" type="button" data-category="puzzle" data-game="Number Stack">
-              <span class="mini-icon gold">#</span>
-              <strong>Number Stack</strong>
-              <small>Puzzle</small>
-            </button>
-            <button class="mini-game" type="button" data-category="multiplayer quick" data-game="Lobby Pong">
-              <span class="mini-icon green">LP</span>
-              <strong>Lobby Pong</strong>
-              <small>Multiplayer</small>
-            </button>
-            <button class="mini-game" type="button" data-category="skill" data-game="Orbit Runner">
-              <span class="mini-icon blue">OR</span>
-              <strong>Orbit Runner</strong>
-              <small>Skill</small>
-            </button>
-            <button class="mini-game" type="button" data-category="puzzle multiplayer" data-game="Word Rush">
-              <span class="mini-icon">WR</span>
-              <strong>Word Rush</strong>
-              <small>Party</small>
-            </button>
-            <button class="mini-game" type="button" data-category="quick" data-game="Neon Slice">
-              <span class="mini-icon warm">CS</span>
-              <strong>Neon Slice</strong>
-              <small>Quick play</small>
-            </button>
+            <article class="game-card">
+              <div class="game-art grid-art" aria-hidden="true"><span>3x3</span></div>
+              <h3>Memory Grid</h3>
+              <p>Repeat the pattern.</p>
+              <div class="card-actions">
+                <button class="play-button" type="button" data-action="solo" data-game="Memory Grid">Play</button>
+                <button class="play-button outline" type="button" data-action="room" data-game="Memory Grid">Room</button>
+              </div>
+            </article>
           </div>
         </section>
 
@@ -225,42 +74,31 @@
           <div class="section-heading">
             <div>
               <p class="eyebrow">Arcade</p>
-              <h2 id="play-title">Play in browser</h2>
+              <h2 id="play-title">Play</h2>
             </div>
-            <p class="section-note">
-              Three placeholder games are playable now. They are simple static
-              games, so they work on free hosting with no backend.
-            </p>
+            <div class="arcade-tabs" aria-label="Playable games">
+              <button class="arcade-tab is-active" type="button" data-open-game="Reaction Dash">Reaction</button>
+              <button class="arcade-tab" type="button" data-open-game="Memory Grid">Memory</button>
+              <button class="arcade-tab" type="button" data-open-game="Click Storm">Click</button>
+            </div>
           </div>
 
           <div class="arcade-shell">
-            <div class="arcade-header">
-              <div>
-                <p class="eyebrow">Now playing</p>
-                <h3 id="active-game-title">Reaction Dash</h3>
-              </div>
-              <div class="arcade-tabs" aria-label="Playable games">
-                <button class="arcade-tab is-active" type="button" data-open-game="Reaction Dash">Reaction</button>
-                <button class="arcade-tab" type="button" data-open-game="Memory Grid">Memory</button>
-                <button class="arcade-tab" type="button" data-open-game="Click Storm">Click</button>
-              </div>
-            </div>
+            <h3 id="active-game-title">Reaction Dash</h3>
 
-            <div class="game-stage" id="reaction-game" data-game-panel="Reaction Dash">
+            <div class="game-stage" data-game-panel="Reaction Dash">
               <div class="stage-copy">
-                <p class="game-badge">Timing</p>
                 <h3 id="reaction-status">Wait for green</h3>
-                <p>Press start, wait for the signal, then tap as fast as you can.</p>
+                <p class="game-result" id="reaction-result">Best: --</p>
               </div>
               <button class="reaction-pad" id="reaction-pad" type="button">Start</button>
-              <p class="game-result" id="reaction-result">Best: --</p>
             </div>
 
-            <div class="game-stage is-hidden" id="memory-game" data-game-panel="Memory Grid">
+            <div class="game-stage is-hidden" data-game-panel="Memory Grid">
               <div class="stage-copy">
-                <p class="game-badge">Pattern</p>
                 <h3>Memory Grid</h3>
-                <p>Watch the flashes, then repeat the pattern. Each round adds one tile.</p>
+                <p class="game-result" id="memory-result">Round: 0</p>
+                <button class="play-button" id="memory-start" type="button">Start</button>
               </div>
               <div class="memory-board" id="memory-board" aria-label="Memory grid">
                 <button type="button" data-tile="0"></button>
@@ -273,126 +111,47 @@
                 <button type="button" data-tile="7"></button>
                 <button type="button" data-tile="8"></button>
               </div>
-              <div class="stage-actions">
-                <button class="play-button" id="memory-start" type="button">Start</button>
-                <p class="game-result" id="memory-result">Round: 0</p>
-              </div>
             </div>
 
-            <div class="game-stage is-hidden" id="click-game" data-game-panel="Click Storm">
+            <div class="game-stage is-hidden" data-game-panel="Click Storm">
               <div class="stage-copy">
-                <p class="game-badge">Speed</p>
                 <h3>Click Storm</h3>
-                <p>Click the moving target as many times as you can in 15 seconds.</p>
+                <p class="game-result" id="click-result">Score: 0</p>
+                <button class="play-button" id="click-start" type="button">Start</button>
               </div>
               <div class="click-arena" id="click-arena">
                 <button class="click-target" id="click-target" type="button">+</button>
               </div>
-              <div class="stage-actions">
-                <button class="play-button" id="click-start" type="button">Start</button>
-                <p class="game-result" id="click-result">Score: 0</p>
-              </div>
             </div>
           </div>
         </section>
 
-        <section class="lobby-section" id="lobby" aria-labelledby="lobby-title">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Multiplayer</p>
-              <h2 id="lobby-title">Room lobby</h2>
-            </div>
-            <p class="section-note">
-              Local simulation today, Firebase Realtime Database next for live
-              rooms, presence, and shared scores.
-            </p>
-          </div>
-
-          <div class="lobby-layout">
-            <form class="lobby-panel" id="room-form">
-              <label for="player-name">Player name</label>
-              <input id="player-name" name="playerName" maxlength="18" value="Nomae" />
-
-              <label for="game-select">Game</label>
-              <select id="game-select" name="game">
+        <section class="bottom-grid">
+          <div class="lobby-panel" id="lobby">
+            <p class="eyebrow">Multiplayer</p>
+            <h2>Lobby</h2>
+            <form id="room-form">
+              <input id="player-name" name="playerName" maxlength="18" value="Nomae" aria-label="Player name" />
+              <select id="game-select" name="game" aria-label="Game">
                 <option>Click Storm</option>
                 <option>Reaction Dash</option>
                 <option>Memory Grid</option>
               </select>
-
-              <div class="room-row">
-                <button class="button primary" type="submit">Create room</button>
-                <button class="button secondary" type="button" id="join-room">Join test room</button>
-              </div>
+              <button class="button primary" type="submit">Create room</button>
             </form>
-
-            <div class="room-card" aria-live="polite">
-              <div class="room-header">
-                <div>
-                  <p class="eyebrow">Active room</p>
-                  <h3 id="room-code">NO ROOM</h3>
-                </div>
-                <span class="room-status">Local</span>
-              </div>
-              <dl class="room-meta">
-                <div>
-                  <dt>Game</dt>
-                  <dd id="room-game">Pick a game</dd>
-                </div>
-                <div>
-                  <dt>Mode</dt>
-                  <dd>Public code</dd>
-                </div>
-                <div>
-                  <dt>Backend</dt>
-                  <dd>Firebase ready</dd>
-                </div>
-              </dl>
-              <div class="player-list" id="player-list">
-                <span class="empty-state">Create a room to add players.</span>
-              </div>
-            </div>
+            <p id="room-code">NO ROOM</p>
+            <p id="room-game">Pick a game</p>
+            <div class="player-list" id="player-list"></div>
           </div>
-        </section>
 
-        <section class="score-section" id="scoreboard" aria-labelledby="score-title">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Scores</p>
-              <h2 id="score-title">Live board surface</h2>
-            </div>
-            <p class="section-note">
-              Scores can stay local for prototypes, then sync to Firebase when a
-              game is ready for public multiplayer.
-            </p>
-          </div>
-          <ol class="score-list" aria-live="polite">
-            <li><span>Ava</span><strong>9820</strong></li>
-            <li><span>Kai</span><strong>9410</strong></li>
-            <li><span>Nomae</span><strong>8995</strong></li>
-          </ol>
-        </section>
-
-        <section class="updates" id="updates" aria-labelledby="updates-title">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Hosting</p>
-              <h2 id="updates-title">Free deploy path</h2>
-            </div>
-          </div>
-          <div class="hosting-grid">
-            <article>
-              <h3>Best simple site host</h3>
-              <p>GitHub Pages. It is free, perfect for plain HTML games, and can publish straight from this repository.</p>
-            </article>
-            <article>
-              <h3>Best multiplayer backend</h3>
-              <p>Firebase Spark plan. Use Authentication anonymously plus Realtime Database for rooms, presence, and score sync.</p>
-            </article>
-            <article>
-              <h3>Best upgrade path</h3>
-              <p>Cloudflare Pages plus Durable Objects when you need lower-latency authoritative game servers later.</p>
-            </article>
+          <div class="score-panel" id="scoreboard">
+            <p class="eyebrow">Scores</p>
+            <h2>Scores</h2>
+            <ol class="score-list" aria-live="polite">
+              <li><span>Reaction</span><strong>--</strong></li>
+              <li><span>Memory</span><strong>--</strong></li>
+              <li><span>Click</span><strong>--</strong></li>
+            </ol>
           </div>
         </section>
       </main>
