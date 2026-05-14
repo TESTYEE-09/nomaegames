@@ -39,12 +39,12 @@
           </div>
           <div class="game-grid">
             <article class="game-card">
-              <div class="game-art click-art" aria-hidden="true"><span>+</span></div>
-              <h3>Click Storm</h3>
-              <p>Hit the target for 15 seconds.</p>
+              <div class="game-art fps-art" aria-hidden="true"><span>FPS</span></div>
+              <h3>NomaeFPS</h3>
+              <p>3D arena shooter source from the attached game.</p>
               <div class="card-actions">
-                <button class="play-button" type="button" data-action="solo" data-game="Click Storm">Play</button>
-                <button class="play-button outline" type="button" data-action="room" data-game="Click Storm">Room</button>
+                <a class="play-button" href="games/nomaefps/">Open</a>
+                <button class="play-button outline" type="button" data-action="room" data-game="NomaeFPS">Room</button>
               </div>
             </article>
 
@@ -79,7 +79,6 @@
             <div class="arcade-tabs" aria-label="Playable games">
               <button class="arcade-tab is-active" type="button" data-open-game="Reaction Dash">Reaction</button>
               <button class="arcade-tab" type="button" data-open-game="Memory Grid">Memory</button>
-              <button class="arcade-tab" type="button" data-open-game="Click Storm">Click</button>
             </div>
           </div>
 
@@ -112,17 +111,6 @@
                 <button type="button" data-tile="8"></button>
               </div>
             </div>
-
-            <div class="game-stage is-hidden" data-game-panel="Click Storm">
-              <div class="stage-copy">
-                <h3>Click Storm</h3>
-                <p class="game-result" id="click-result">Score: 0</p>
-                <button class="play-button" id="click-start" type="button">Start</button>
-              </div>
-              <div class="click-arena" id="click-arena">
-                <button class="click-target" id="click-target" type="button">+</button>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -133,7 +121,7 @@
             <form id="room-form">
               <input id="player-name" name="playerName" maxlength="18" value="Nomae" aria-label="Player name" />
               <select id="game-select" name="game" aria-label="Game">
-                <option>Click Storm</option>
+                <option>NomaeFPS</option>
                 <option>Reaction Dash</option>
                 <option>Memory Grid</option>
               </select>
@@ -150,7 +138,7 @@
             <ol class="score-list" aria-live="polite">
               <li><span>Reaction</span><strong>--</strong></li>
               <li><span>Memory</span><strong>--</strong></li>
-              <li><span>Click</span><strong>--</strong></li>
+              <li><span>NomaeFPS</span><strong>source</strong></li>
             </ol>
           </div>
         </section>

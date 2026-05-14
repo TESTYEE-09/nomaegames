@@ -217,7 +217,7 @@ h2 {
   font-weight: 950;
 }
 
-.click-art {
+.fps-art {
   background: linear-gradient(135deg, var(--pink), var(--gold));
 }
 
@@ -319,32 +319,6 @@ h2 {
 .memory-board button.is-lit,
 .memory-board button:hover {
   background: var(--blue);
-}
-
-.click-arena {
-  position: relative;
-  min-height: 320px;
-  overflow: hidden;
-  border-radius: 20px;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-    var(--panel-strong);
-  background-size: 38px 38px;
-}
-
-.click-target {
-  position: absolute;
-  left: 42%;
-  top: 38%;
-  width: 72px;
-  height: 72px;
-  border: 0;
-  border-radius: 50%;
-  background: var(--pink);
-  color: #050505;
-  font-size: 2rem;
-  font-weight: 950;
 }
 
 .bottom-grid {
@@ -452,8 +426,7 @@ select {
     grid-template-columns: 1fr;
   }
 
-  .reaction-pad,
-  .click-arena {
+  .reaction-pad {
     min-height: 250px;
   }
 }

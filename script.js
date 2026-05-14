@@ -16,10 +16,6 @@ const reactionResult = document.querySelector("#reaction-result");
 const memoryStart = document.querySelector("#memory-start");
 const memoryBoard = document.querySelector("#memory-board");
 const memoryResult = document.querySelector("#memory-result");
-const clickStart = document.querySelector("#click-start");
-const clickArena = document.querySelector("#click-arena");
-const clickTarget = document.querySelector("#click-target");
-const clickResult = document.querySelector("#click-result");
 
 const queueScore = () => Math.floor(8200 + Math.random() * 1800);
 const roomId = () => Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -32,9 +28,6 @@ let reactionBest = null;
 let memoryPattern = [];
 let memoryInput = [];
 let memoryLocked = true;
-let clickScore = 0;
-let clickRunning = false;
-let clickTimer = null;
 
 const showToast = (message) => {
   toast.textContent = message;
@@ -106,7 +99,7 @@ buttons.forEach((button) => {
       return;
     }
 
-    openGame(["Reaction Dash", "Memory Grid", "Click Storm"].includes(gameName) ? gameName : "Click Storm");
+    openGame(["Reaction Dash", "Memory Grid"].includes(gameName) ? gameName : "Reaction Dash");
     showToast(`${gameName} loaded in the arcade.`);
   });
 });
@@ -206,42 +199,6 @@ memoryBoard.querySelectorAll("button").forEach((tile) => {
       window.setTimeout(nextMemoryRound, 650);
     }
   });
-});
-
-const moveClickTarget = () => {
-  const maxX = Math.max(0, clickArena.clientWidth - clickTarget.offsetWidth);
-  const maxY = Math.max(0, clickArena.clientHeight - clickTarget.offsetHeight);
-  clickTarget.style.left = `${Math.random() * maxX}px`;
-  clickTarget.style.top = `${Math.random() * maxY}px`;
-};
-
-clickStart.addEventListener("click", () => {
-  clickScore = 0;
-  clickRunning = true;
-  clickResult.textContent = "Score: 0 | Time: 15";
-  clickTarget.disabled = false;
-  moveClickTarget();
-  window.clearInterval(clickTimer);
-
-  let timeLeft = 15;
-  clickTimer = window.setInterval(() => {
-    timeLeft -= 1;
-    clickResult.textContent = `Score: ${clickScore} | Time: ${timeLeft}`;
-    if (timeLeft <= 0) {
-      window.clearInterval(clickTimer);
-      clickRunning = false;
-      clickTarget.disabled = true;
-      clickResult.textContent = `Final score: ${clickScore}`;
-      addScore("Click Storm");
-    }
-  }, 1000);
-});
-
-clickTarget.addEventListener("click", () => {
-  if (!clickRunning) return;
-  clickScore += 1;
-  clickResult.textContent = `Score: ${clickScore}`;
-  moveClickTarget();
 });
 
 roomForm.addEventListener("submit", (event) => {

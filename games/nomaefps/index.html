@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NomaeFPS</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="../../">
+          <span class="brand-mark">N</span>
+          <span>Nomae Games</span>
+        </a>
+        <nav class="nav-links">
+          <a href="../../">Hub</a>
+          <a href="source/README.md">Source</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <p class="eyebrow">NomaeFPS</p>
+          <h1>Arena FPS</h1>
+          <p>Attached React/Three.js shooter source is included in this repo.</p>
+          <a class="button primary" href="source/README.md">Open source notes</a>
+        </section>
+
+        <section class="section">
+          <div class="game-grid">
+            <article class="game-card">
+              <div class="game-art fps-art" aria-hidden="true"><span>FPS</span></div>
+              <h3>Static note</h3>
+              <p>The attached game needs a build step before it can run here.</p>
+            </article>
+            <article class="game-card">
+              <div class="game-art dash-art" aria-hidden="true"><span>1</span></div>
+              <h3>Build client</h3>
+              <p>Run npm install and npm run build inside source/client.</p>
+            </article>
+            <article class="game-card">
+              <div class="game-art grid-art" aria-hidden="true"><span>2</span></div>
+              <h3>Multiplayer</h3>
+              <p>Run source/server for WebSocket rooms.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

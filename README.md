@@ -1,17 +1,17 @@
 # Nomae Games
 
-A static HTML game hub for Nomae Games with three playable placeholder games
-and a multiplayer-ready lobby surface.
+A static HTML game hub for Nomae Games with two playable placeholder games,
+the attached NomaeFPS source, and a multiplayer-ready lobby surface.
 
 ## Run locally
 
 Open `index.html` in a browser, or serve the folder with any static file server.
 
-## Playable placeholders
+## Games
 
 - Reaction Dash - wait for the signal and tap as fast as possible.
 - Memory Grid - repeat the flashing pattern as it grows each round.
-- Click Storm - hit the moving target as many times as possible in 15 seconds.
+- NomaeFPS - attached Arena FPS source in `games/nomaefps/source`.
 
 ## Deploy
 
@@ -67,3 +67,4 @@ files. Keep production credentials in the hosting provider dashboard.
 - `index.html` - page content and sections
 - `styles.css` - responsive arcade UI styling
 - `script.js` - playable placeholder games, local lobby, and score interactions
+- `games/nomaefps/` - attached FPS game source and launcher page
