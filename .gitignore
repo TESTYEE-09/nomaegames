@@ -1,3 +1,9 @@
 .DS_Store
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.crt
 node_modules/
 dist/

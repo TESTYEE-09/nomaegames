@@ -1,10 +1,17 @@
 # Nomae Games
 
-A static HTML game hub for Nomae Games with a multiplayer-ready lobby surface.
+A static HTML game hub for Nomae Games with three playable placeholder games
+and a multiplayer-ready lobby surface.
 
 ## Run locally
 
 Open `index.html` in a browser, or serve the folder with any static file server.
+
+## Playable placeholders
+
+- Reaction Dash - wait for the signal and tap as fast as possible.
+- Memory Grid - repeat the flashing pattern as it grows each round.
+- Click Storm - hit the moving target as many times as possible in 15 seconds.
 
 ## Deploy
 
@@ -52,8 +59,11 @@ Suggested Firebase data shape:
 }
 ```
 
+Do not commit real Firebase config, private keys, API secrets, or local `.env`
+files. Keep production credentials in the hosting provider dashboard.
+
 ## Structure
 
 - `index.html` - page content and sections
 - `styles.css` - responsive arcade UI styling
-- `script.js` - lightweight local lobby and score interactions
+- `script.js` - playable placeholder games, local lobby, and score interactions

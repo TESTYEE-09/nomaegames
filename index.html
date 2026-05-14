@@ -8,12 +8,6 @@
       content="Nomae Games is a focused arcade hub for quick web games, score chasing, and lightweight multiplayer experiments."
     />
     <title>Nomae Games</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -94,9 +88,9 @@
           <div class="featured-strip" aria-label="Featured game shelves">
             <article class="spotlight-card">
               <span class="game-badge">Top pick</span>
-              <h3>Face Rating Arena</h3>
-              <p>Party-score chaos with face tracking, fast rounds, and a live board.</p>
-              <button class="play-button" type="button" data-action="room" data-game="Face Rating Arena">
+              <h3>Click Storm</h3>
+              <p>Fast target tapping, short rounds, and instant score chasing.</p>
+              <button class="play-button" type="button" data-action="room" data-game="Click Storm">
                 Start room
               </button>
             </article>
@@ -114,17 +108,17 @@
               <div class="game-art face-art" aria-hidden="true"><span>98</span></div>
               <div>
                 <p class="game-kicker">Multiplayer ready</p>
-                <h3>Face Rating Arena</h3>
+                <h3>Click Storm</h3>
                 <p>
-                  A score-chasing face analysis game with visible feedback,
-                  leaderboard hooks, and quick party-session energy.
+                  A 15-second target chase with moving buttons, quick restarts,
+                  and score-board pressure.
                 </p>
               </div>
               <div class="card-actions">
-                <button class="play-button" type="button" data-action="solo" data-game="Face Rating Arena">
-                  Solo
+                <button class="play-button" type="button" data-action="solo" data-game="Click Storm">
+                  Play
                 </button>
-                <button class="play-button outline" type="button" data-action="room" data-game="Face Rating Arena">
+                <button class="play-button outline" type="button" data-action="room" data-game="Click Storm">
                   Room
                 </button>
               </div>
@@ -138,7 +132,7 @@
               </div>
               <div class="card-actions">
                 <button class="play-button" type="button" data-action="solo" data-game="Reaction Dash">
-                  Solo
+                  Play
                 </button>
                 <button class="play-button outline" type="button" data-action="room" data-game="Reaction Dash">
                   Room
@@ -154,7 +148,7 @@
               </div>
               <div class="card-actions">
                 <button class="play-button" type="button" data-action="solo" data-game="Memory Grid">
-                  Solo
+                  Play
                 </button>
                 <button class="play-button outline" type="button" data-action="room" data-game="Memory Grid">
                   Room
@@ -179,9 +173,9 @@
             <button class="category-pill" type="button" data-filter="quick">Quick play</button>
           </div>
           <div class="mini-game-grid" id="mini-game-grid">
-            <button class="mini-game" type="button" data-category="multiplayer skill" data-game="Face Rating Arena">
-              <span class="mini-icon">FR</span>
-              <strong>Face Rating Arena</strong>
+            <button class="mini-game" type="button" data-category="multiplayer skill quick" data-game="Click Storm">
+              <span class="mini-icon">CS</span>
+              <strong>Click Storm</strong>
               <small>Multiplayer</small>
             </button>
             <button class="mini-game" type="button" data-category="skill quick" data-game="Reaction Dash">
@@ -219,11 +213,86 @@
               <strong>Word Rush</strong>
               <small>Party</small>
             </button>
-            <button class="mini-game" type="button" data-category="quick" data-game="Click Storm">
+            <button class="mini-game" type="button" data-category="quick" data-game="Neon Slice">
               <span class="mini-icon warm">CS</span>
-              <strong>Click Storm</strong>
+              <strong>Neon Slice</strong>
               <small>Quick play</small>
             </button>
+          </div>
+        </section>
+
+        <section class="play-section" id="play" aria-labelledby="play-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Arcade</p>
+              <h2 id="play-title">Play in browser</h2>
+            </div>
+            <p class="section-note">
+              Three placeholder games are playable now. They are simple static
+              games, so they work on free hosting with no backend.
+            </p>
+          </div>
+
+          <div class="arcade-shell">
+            <div class="arcade-header">
+              <div>
+                <p class="eyebrow">Now playing</p>
+                <h3 id="active-game-title">Reaction Dash</h3>
+              </div>
+              <div class="arcade-tabs" aria-label="Playable games">
+                <button class="arcade-tab is-active" type="button" data-open-game="Reaction Dash">Reaction</button>
+                <button class="arcade-tab" type="button" data-open-game="Memory Grid">Memory</button>
+                <button class="arcade-tab" type="button" data-open-game="Click Storm">Click</button>
+              </div>
+            </div>
+
+            <div class="game-stage" id="reaction-game" data-game-panel="Reaction Dash">
+              <div class="stage-copy">
+                <p class="game-badge">Timing</p>
+                <h3 id="reaction-status">Wait for green</h3>
+                <p>Press start, wait for the signal, then tap as fast as you can.</p>
+              </div>
+              <button class="reaction-pad" id="reaction-pad" type="button">Start</button>
+              <p class="game-result" id="reaction-result">Best: --</p>
+            </div>
+
+            <div class="game-stage is-hidden" id="memory-game" data-game-panel="Memory Grid">
+              <div class="stage-copy">
+                <p class="game-badge">Pattern</p>
+                <h3>Memory Grid</h3>
+                <p>Watch the flashes, then repeat the pattern. Each round adds one tile.</p>
+              </div>
+              <div class="memory-board" id="memory-board" aria-label="Memory grid">
+                <button type="button" data-tile="0"></button>
+                <button type="button" data-tile="1"></button>
+                <button type="button" data-tile="2"></button>
+                <button type="button" data-tile="3"></button>
+                <button type="button" data-tile="4"></button>
+                <button type="button" data-tile="5"></button>
+                <button type="button" data-tile="6"></button>
+                <button type="button" data-tile="7"></button>
+                <button type="button" data-tile="8"></button>
+              </div>
+              <div class="stage-actions">
+                <button class="play-button" id="memory-start" type="button">Start</button>
+                <p class="game-result" id="memory-result">Round: 0</p>
+              </div>
+            </div>
+
+            <div class="game-stage is-hidden" id="click-game" data-game-panel="Click Storm">
+              <div class="stage-copy">
+                <p class="game-badge">Speed</p>
+                <h3>Click Storm</h3>
+                <p>Click the moving target as many times as you can in 15 seconds.</p>
+              </div>
+              <div class="click-arena" id="click-arena">
+                <button class="click-target" id="click-target" type="button">+</button>
+              </div>
+              <div class="stage-actions">
+                <button class="play-button" id="click-start" type="button">Start</button>
+                <p class="game-result" id="click-result">Score: 0</p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -246,7 +315,7 @@
 
               <label for="game-select">Game</label>
               <select id="game-select" name="game">
-                <option>Face Rating Arena</option>
+                <option>Click Storm</option>
                 <option>Reaction Dash</option>
                 <option>Memory Grid</option>
               </select>
