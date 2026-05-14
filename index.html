@@ -39,32 +39,73 @@
           </div>
           <div class="game-grid">
             <article class="game-card">
-              <div class="game-art fps-art" aria-hidden="true"><span>FPS</span></div>
+              <div class="game-art fps-art" aria-hidden="true">
+                <span>FPS</span>
+              </div>
               <h3>NomaeFPS</h3>
               <p>Browser arena shooter.</p>
               <div class="card-actions">
                 <a class="play-button" href="games/nomaefps/">Open</a>
-                <button class="play-button outline" type="button" data-action="room" data-game="NomaeFPS">Room</button>
+                <button
+                  class="play-button outline"
+                  type="button"
+                  data-action="room"
+                  data-game="NomaeFPS"
+                >
+                  Room
+                </button>
               </div>
             </article>
 
             <article class="game-card">
-              <div class="game-art dash-art" aria-hidden="true"><span>GO</span></div>
+              <div class="game-art dash-art" aria-hidden="true">
+                <span>GO</span>
+              </div>
               <h3>Reaction Dash</h3>
               <p>Wait for green, then tap.</p>
               <div class="card-actions">
-                <button class="play-button" type="button" data-action="solo" data-game="Reaction Dash">Play</button>
-                <button class="play-button outline" type="button" data-action="room" data-game="Reaction Dash">Room</button>
+                <button
+                  class="play-button"
+                  type="button"
+                  data-action="solo"
+                  data-game="Reaction Dash"
+                >
+                  Play
+                </button>
+                <button
+                  class="play-button outline"
+                  type="button"
+                  data-action="room"
+                  data-game="Reaction Dash"
+                >
+                  Room
+                </button>
               </div>
             </article>
 
             <article class="game-card">
-              <div class="game-art grid-art" aria-hidden="true"><span>3x3</span></div>
+              <div class="game-art grid-art" aria-hidden="true">
+                <span>3x3</span>
+              </div>
               <h3>Memory Grid</h3>
               <p>Repeat the pattern.</p>
               <div class="card-actions">
-                <button class="play-button" type="button" data-action="solo" data-game="Memory Grid">Play</button>
-                <button class="play-button outline" type="button" data-action="room" data-game="Memory Grid">Room</button>
+                <button
+                  class="play-button"
+                  type="button"
+                  data-action="solo"
+                  data-game="Memory Grid"
+                >
+                  Play
+                </button>
+                <button
+                  class="play-button outline"
+                  type="button"
+                  data-action="room"
+                  data-game="Memory Grid"
+                >
+                  Room
+                </button>
               </div>
             </article>
           </div>
@@ -77,8 +118,20 @@
               <h2 id="play-title">Play</h2>
             </div>
             <div class="arcade-tabs" aria-label="Playable games">
-              <button class="arcade-tab is-active" type="button" data-open-game="Reaction Dash">Reaction</button>
-              <button class="arcade-tab" type="button" data-open-game="Memory Grid">Memory</button>
+              <button
+                class="arcade-tab is-active"
+                type="button"
+                data-open-game="Reaction Dash"
+              >
+                Reaction
+              </button>
+              <button
+                class="arcade-tab"
+                type="button"
+                data-open-game="Memory Grid"
+              >
+                Memory
+              </button>
             </div>
           </div>
 
@@ -90,25 +143,69 @@
                 <h3 id="reaction-status">Wait for green</h3>
                 <p class="game-result" id="reaction-result">Best: --</p>
               </div>
-              <button class="reaction-pad" id="reaction-pad" type="button">Start</button>
+              <button class="reaction-pad" id="reaction-pad" type="button">
+                Start
+              </button>
             </div>
 
             <div class="game-stage is-hidden" data-game-panel="Memory Grid">
               <div class="stage-copy">
                 <h3>Memory Grid</h3>
                 <p class="game-result" id="memory-result">Round: 0</p>
-                <button class="play-button" id="memory-start" type="button">Start</button>
+                <button class="play-button" id="memory-start" type="button">
+                  Start
+                </button>
               </div>
-              <div class="memory-board" id="memory-board" aria-label="Memory grid">
-                <button type="button" data-tile="0"></button>
-                <button type="button" data-tile="1"></button>
-                <button type="button" data-tile="2"></button>
-                <button type="button" data-tile="3"></button>
-                <button type="button" data-tile="4"></button>
-                <button type="button" data-tile="5"></button>
-                <button type="button" data-tile="6"></button>
-                <button type="button" data-tile="7"></button>
-                <button type="button" data-tile="8"></button>
+              <div
+                class="memory-board"
+                id="memory-board"
+                aria-label="Memory grid"
+              >
+                <button
+                  type="button"
+                  data-tile="0"
+                  aria-label="Tile 1"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="1"
+                  aria-label="Tile 2"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="2"
+                  aria-label="Tile 3"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="3"
+                  aria-label="Tile 4"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="4"
+                  aria-label="Tile 5"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="5"
+                  aria-label="Tile 6"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="6"
+                  aria-label="Tile 7"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="7"
+                  aria-label="Tile 8"
+                ></button>
+                <button
+                  type="button"
+                  data-tile="8"
+                  aria-label="Tile 9"
+                ></button>
               </div>
             </div>
           </div>
@@ -119,7 +216,14 @@
             <p class="eyebrow">Multiplayer</p>
             <h2>Lobby</h2>
             <form id="room-form">
-              <input id="player-name" name="playerName" maxlength="18" value="Nomae" aria-label="Player name" />
+              <input
+                id="player-name"
+                name="playerName"
+                maxlength="18"
+                value="Nomae"
+                placeholder="Player name"
+                aria-label="Player name"
+              />
               <select id="game-select" name="game" aria-label="Game">
                 <option>NomaeFPS</option>
                 <option>Reaction Dash</option>
