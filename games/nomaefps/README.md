@@ -1,5 +1,5 @@
 # NomaeFPS
 
-`index.html` is a lightweight playable browser shooter for GitHub Pages.
+`index.html` is currently **KRUNK BLOCK**, a mobile-first web FPS clone with an in-page Three.js game, retro HUD, touch controls, and desktop controls.
 
-The attached Arena FPS project is preserved in `source/` for the full React/Three multiplayer build. Its client source uses relative asset paths, and the multiplayer server remains in `source/server`.
+The separate Arena FPS project is preserved in `source/` as the React/Three multiplayer build with its WebSocket server in `source/server`.
