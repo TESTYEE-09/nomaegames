@@ -243,6 +243,26 @@
         </div>
     </div>
 
+
+
+    <div id="settings-panel" class="absolute top-4 right-4 z-40 bg-black/75 border border-cyan-400/70 rounded p-3 text-white text-xs w-64 hidden">
+        <div class="font-bold text-cyan-300 mb-2">Settings</div>
+        <label class="block mb-2">Desktop Sensitivity
+            <input id="set-sens-desktop" type="range" min="0.0008" max="0.004" step="0.0001" value="0.002" class="w-full" />
+        </label>
+        <label class="block mb-2">Trackpad Sensitivity
+            <input id="set-sens-trackpad" type="range" min="0.0005" max="0.003" step="0.0001" value="0.0013" class="w-full" />
+        </label>
+        <label class="block mb-2">Mobile Sensitivity
+            <input id="set-sens-mobile" type="range" min="0.002" max="0.01" step="0.0002" value="0.0055" class="w-full" />
+        </label>
+        <label class="flex items-center gap-2 mb-2"><input id="set-show-controls" type="checkbox" checked /> Show touch controls</label>
+        <label class="flex items-center gap-2 mb-2"><input id="set-show-nametags" type="checkbox" checked /> Show nametags</label>
+        <label class="block mb-2">Nametag text
+            <input id="set-nametag-text" type="text" maxlength="18" value="BOT" class="w-full text-black px-1" />
+        </label>
+    </div>
+
     <!-- Scripts Section: Game Logic -->
     <script>
         // --- Web Audio API Synthesizer (Music & Upgraded Sound Effects!) ---
@@ -519,10 +539,16 @@
             lastSentAt: 0
         };
 
+        const settings = {
+            showControls: true,
+            showNametags: true,
+            nametagText: 'BOT'
+        };
+
         // Camera control multipliers
-        const SENSITIVITY_DESKTOP = 0.002;
-        const SENSITIVITY_TRACKPAD = 0.0013;
-        const SENSITIVITY_MOBILE = 0.0055;
+        let SENSITIVITY_DESKTOP = 0.002;
+        let SENSITIVITY_TRACKPAD = 0.0013;
+        let SENSITIVITY_MOBILE = 0.0055;
         const COYOTE_TIME = 0.14;
         const JUMP_BUFFER_TIME = 0.12;
 
@@ -852,7 +878,35 @@
                 rLeg.castShadow = true;
                 this.group.add(rLeg);
 
+                this.nametag = this.createNametag(`${settings.nametagText}`);
+                this.nametag.position.set(0, 4.25, 0);
+                this.group.add(this.nametag);
                 scene.add(this.group);
+            }
+
+            createNametag(text) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 256;
+                canvas.height = 64;
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0,0,256,64);
+                ctx.fillStyle = "rgba(0,0,0,0.45)";
+                ctx.fillRect(12, 8, 232, 48);
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 28px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(text, 128, 42);
+                const texture = new THREE.CanvasTexture(canvas);
+                const mat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+                const sp = new THREE.Sprite(mat);
+                sp.scale.set(7, 1.8, 1);
+                return sp;
+            }
+
+            updateNametag() {
+                if (!this.nametag) return;
+                this.nametag.visible = settings.showNametags;
+                this.nametag.quaternion.copy(camera.quaternion);
             }
 
             // Checks whether the bot intersects any structural blocks
@@ -944,6 +998,22 @@
 
                 this.group.position.x = Math.max(-70, Math.min(70, this.group.position.x));
                 this.group.position.z = Math.max(-70, Math.min(70, this.group.position.z));
+                this.updateNametag();
+            }
+
+            hasLineOfSightToPlayer(startPos, endPos) {
+                const dir = new THREE.Vector3().subVectors(endPos, startPos);
+                const len = dir.length();
+                if (len <= 0.001) return true;
+                dir.normalize();
+                const ray = new THREE.Ray(startPos, dir);
+                for (let i = 1; i < obstacles.length; i++) {
+                    const b = obstacles[i];
+                    const box = new THREE.Box3(b.min.clone(), b.max.clone());
+                    const hit = ray.intersectBox(box, new THREE.Vector3());
+                    if (hit && hit.distanceTo(startPos) < len) return false;
+                }
+                return true;
             }
 
             shootAtPlayer(time) {
@@ -951,6 +1021,8 @@
 
                 const startPos = this.group.position.clone().add(new THREE.Vector3(0, 1.8, 0));
                 const endPos = player.position.clone().add(new THREE.Vector3(0, 1.0, 0));
+
+                if (!this.hasLineOfSightToPlayer(startPos, endPos)) return;
 
                 createBulletTrail(startPos, endPos, 0xff0000);
                 playSynthSound('shoot');
@@ -1385,7 +1457,8 @@
 
             // X translation axis
             const stepX = player.position.x + player.velocity.x * d;
-            if (!checkCollisions(new THREE.Vector3(stepX, player.position.y, player.position.z), true)) {
+            const stepProbeX = new THREE.Vector3(stepX, player.position.y + 0.55, player.position.z);
+            if (!checkCollisions(stepProbeX, true)) {
                 player.position.x = stepX;
             } else {
                 player.velocity.x = 0;
@@ -1393,7 +1466,8 @@
 
             // Z translation axis
             const stepZ = player.position.z + player.velocity.z * d;
-            if (!checkCollisions(new THREE.Vector3(player.position.x, player.position.y, stepZ), true)) {
+            const stepProbeZ = new THREE.Vector3(player.position.x, player.position.y + 0.55, stepZ);
+            if (!checkCollisions(stepProbeZ, true)) {
                 player.position.z = stepZ;
             } else {
                 player.velocity.z = 0;
@@ -1506,6 +1580,22 @@
         // --- INPUT EVENT HANDLING ---
         function initControls() {
             checkMobile();
+
+            const settingsPanel = document.getElementById('settings-panel');
+            const sensDesktop = document.getElementById('set-sens-desktop');
+            const sensTrackpad = document.getElementById('set-sens-trackpad');
+            const sensMobile = document.getElementById('set-sens-mobile');
+            const showControls = document.getElementById('set-show-controls');
+            const showNametags = document.getElementById('set-show-nametags');
+            const nametagText = document.getElementById('set-nametag-text');
+
+            window.addEventListener('keydown', (e) => { if (e.key.toLowerCase() === 'o') settingsPanel.classList.toggle('hidden'); });
+            sensDesktop.addEventListener('input', () => SENSITIVITY_DESKTOP = Number(sensDesktop.value));
+            sensTrackpad.addEventListener('input', () => SENSITIVITY_TRACKPAD = Number(sensTrackpad.value));
+            sensMobile.addEventListener('input', () => SENSITIVITY_MOBILE = Number(sensMobile.value));
+            showControls.addEventListener('change', () => { settings.showControls = showControls.checked; document.getElementById('mobile-controls').style.display = settings.showControls ? 'block' : 'none'; });
+            showNametags.addEventListener('change', () => { settings.showNametags = showNametags.checked; });
+            nametagText.addEventListener('change', () => { settings.nametagText = nametagText.value || 'BOT'; bots.forEach((b) => { if (b.nametag) { b.group.remove(b.nametag); b.nametag = b.createNametag(settings.nametagText); b.nametag.position.set(0,4.25,0); b.group.add(b.nametag); } }); });
 
             const clampPitch = () => {
                 player.pitch = Math.max(-Math.PI / 2.1, Math.min(Math.PI / 2.1, player.pitch));

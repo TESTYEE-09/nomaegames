@@ -37,3 +37,10 @@ npm run dev
 - **Room flow:** `join -> waiting -> gameStarted -> state updates -> gameOver`.
 
 This lines up with `source/server/src/index.ts` + `GameRoom.ts` so the browser client can be wired incrementally without changing match rules.
+
+
+## One-map multiplayer mode
+
+- Server now runs a persistent global room (`WORLD`) so every connected player is in the same match space.
+- Client `join.roomCode` is ignored by the server in this mode (kept only for protocol compatibility).
+- Current player cap is 32 for the shared world session.

@@ -5,16 +5,10 @@ import type { ClientMessage } from '../../shared/types.js';
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
 const wss = new WebSocketServer({ port: PORT });
 
-const rooms = new Map<string, GameRoom>();
-
-function getOrCreateRoom(code: string): GameRoom {
-  if (!rooms.has(code)) {
-    rooms.set(code, new GameRoom(code, (room) => {
-      rooms.delete(room.code);
-    }));
-  }
-  return rooms.get(code)!;
-}
+const GLOBAL_ROOM_CODE = 'WORLD';
+const globalRoom = new GameRoom(GLOBAL_ROOM_CODE, () => {
+  // Intentionally no-op: global room is persistent for the one-map mode.
+});
 
 wss.on('connection', (ws) => {
   let room: GameRoom | null = null;
@@ -25,7 +19,7 @@ wss.on('connection', (ws) => {
       const msg = JSON.parse(data.toString()) as ClientMessage;
 
       if (msg.type === 'join') {
-        room = getOrCreateRoom(msg.roomCode);
+        room = globalRoom;
         playerId = room.addPlayer(ws, msg.name);
       } else if (room && playerId) {
         room.handleMessage(playerId, msg);
@@ -46,4 +40,4 @@ wss.on('connection', (ws) => {
   });
 });
 
-console.log(`Arena FPS server running on port ${PORT}`);
+console.log(`Arena FPS one-map server running on port ${PORT} (room: ${GLOBAL_ROOM_CODE})`);
