@@ -26,3 +26,14 @@ npm run dev
 1. `cd client && npm run build`
 2. Serve `client/dist` as static files
 3. `cd server && npm start` (or use PM2)
+
+
+## Multiplayer groundwork (implementation-ready)
+
+- **Client transport target:** `ws://localhost:3001` (room code + player name handshake).
+- **Client send tick:** 20Hz input packets (`w/a/s/d/space/shift`, yaw/pitch, shoot/reload events).
+- **Server sim tick:** 60Hz authoritative movement/combat with state snapshots sent to clients.
+- **Reconciliation:** client keeps last acknowledged input id and reapplies unacked inputs after server state.
+- **Room flow:** `join -> waiting -> gameStarted -> state updates -> gameOver`.
+
+This lines up with `source/server/src/index.ts` + `GameRoom.ts` so the browser client can be wired incrementally without changing match rules.

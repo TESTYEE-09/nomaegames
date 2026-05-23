@@ -1,7 +1,7 @@
 # Nomae Games
 
-A static HTML game hub for Nomae Games with two playable placeholder games,
-the attached NomaeFPS source, and a multiplayer-ready lobby surface.
+A browser game project with a direct homepage redirect to the NomaeFPS shooter,
+plus legacy mini-game code and an attached Arena FPS source tree.
 
 ## Run locally
 
@@ -64,7 +64,35 @@ files. Keep production credentials in the hosting provider dashboard.
 
 ## Structure
 
-- `index.html` - page content and sections
-- `styles.css` - responsive arcade UI styling
-- `script.js` - playable placeholder games, local lobby, and score interactions
-- `games/nomaefps/` - attached FPS game source and launcher page
+- `index.html` - redirect entry that forwards visitors to the shooter URL
+- `games/nomaefps/index.html` - primary playable KRUNK BLOCK shooter client
+- `games/nomaefps/source/client` - React/Three multiplayer client source
+- `games/nomaefps/source/server` - authoritative WebSocket game server source
+
+
+## Multiplayer plan (NomaeFPS)
+
+1. **Networking model (authoritative server)**
+   - Keep server-authoritative hit validation and movement reconciliation in `games/nomaefps/source/server`.
+   - Move projectile, cooldown, reload, and health truth entirely server-side.
+
+2. **Matchmaking + rooms**
+   - Add quick-play queue plus private room codes.
+   - Keep room metadata in Firebase (or Redis) and hand active matches to Node room workers.
+
+3. **Tick/state protocol**
+   - Ship compact snapshot deltas at 20–30 Hz with interpolation buffers client-side.
+   - Keep full server simulation at 60 Hz for hit precision.
+
+4. **Anti-cheat + fairness**
+   - Validate fire-rate, angle deltas, movement caps, and impossible jumps on server.
+   - Add lag compensation window for hitscan so high-ping users can still register valid shots.
+
+5. **Scale + deployment**
+   - Start with one regional server, then add region selection (NA/EU/AP).
+   - Add health checks, room autoscaling, and crash-safe room handoff.
+
+6. **Roadmap milestones**
+   - Milestone 1: 1v1 private rooms + scoreboard + reconnect.
+   - Milestone 2: 4–8 player public queue + map rotation.
+   - Milestone 3: party system + ranked ladder + seasonal stats.
