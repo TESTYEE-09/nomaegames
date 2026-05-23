@@ -498,7 +498,9 @@
             isAiming: false,
             speed: 13.5, // Speed in meters per second
             momentum: 0,
-            slideBoostCooldown: false
+            slideBoostCooldown: false,
+            coyoteTimer: 0,
+            jumpBufferTimer: 0
         };
 
         // Environment list for collisions
@@ -507,10 +509,22 @@
         let particles = [];
         let damageIndicators = [];
 
+        // Multiplayer groundwork (client state + network tick placeholders)
+        const net = {
+            enabled: false,
+            serverUrl: 'ws://localhost:3001',
+            roomCode: '',
+            playerName: 'Player',
+            tickRate: 20,
+            lastSentAt: 0
+        };
+
         // Camera control multipliers
         const SENSITIVITY_DESKTOP = 0.002;
         const SENSITIVITY_TRACKPAD = 0.0013;
         const SENSITIVITY_MOBILE = 0.0055;
+        const COYOTE_TIME = 0.14;
+        const JUMP_BUFFER_TIME = 0.12;
 
         // Inputs
         const keys = { w: false, a: false, s: false, d: false, shift: false, space: false, c: false };
@@ -1326,6 +1340,9 @@
         function updatePlayerPhysics(delta) {
             const d = Math.min(0.1, delta);
 
+            player.jumpBufferTimer = Math.max(0, player.jumpBufferTimer - d);
+            player.coyoteTimer = Math.max(0, player.coyoteTimer - d);
+
             if (!player.onGround) {
                 player.velocity.y -= 25.0 * d;
             }
@@ -1387,11 +1404,20 @@
             const checkYPos = new THREE.Vector3(player.position.x, stepY, player.position.z);
             if (!checkCollisions(checkYPos, false)) {
                 player.position.y = stepY;
+                if (player.onGround) player.coyoteTimer = COYOTE_TIME;
                 player.onGround = false;
             } else {
                 if (player.velocity.y < 0) {
                     player.onGround = true;
+                    player.coyoteTimer = 0;
                     player.slideBoostCooldown = false;
+
+                    if (player.jumpBufferTimer > 0) {
+                        player.jumpBufferTimer = 0;
+                        player.velocity.y = 10.8;
+                        player.onGround = false;
+                        playSynthSound('jump');
+                    }
                     
                     const gy = getGroundY(player.position);
                     player.position.y = gy; // Snap elevation
@@ -1416,7 +1442,7 @@
                 
                 const horizontalVel = Math.abs(player.velocity.x) + Math.abs(player.velocity.z);
                 if (horizontalVel > 0.05 && !player.slideBoostCooldown) {
-                    player.momentum = 0.25;
+                    player.momentum = 0.36;
                     playSynthSound('slide');
                     player.slideBoostCooldown = true;
 
@@ -1429,15 +1455,21 @@
         }
 
         function triggerJump() {
-            if (player.onGround) {
-                player.velocity.y = 9.8;
-                player.onGround = false;
-                playSynthSound('jump');
+            player.jumpBufferTimer = JUMP_BUFFER_TIME;
 
-                if (player.isCrouching) {
-                    player.momentum = Math.min(0.4, player.momentum + 0.08);
-                    triggerCrouch(false);
-                }
+            const canJump = player.onGround || player.coyoteTimer > 0;
+            if (!canJump) return;
+
+            player.jumpBufferTimer = 0;
+            player.coyoteTimer = 0;
+            player.velocity.y = 10.8;
+            player.onGround = false;
+            playSynthSound('jump');
+
+            if (player.isCrouching) {
+                // Crouch -> jump combo burst
+                player.momentum = Math.min(0.7, player.momentum + 0.22);
+                triggerCrouch(false);
             }
         }
 
