@@ -3,7 +3,7 @@ import { Player } from './Player.js';
 import type { ClientMessage, ServerMessage, PlayerState, Vector3, RoomConfig, KillFeedEntry } from '../../shared/types.js';
 
 const TICK_RATE = 60;
-const MAX_PLAYERS = 8;
+const MAX_PLAYERS = 32;
 const GAME_DURATION = 600;
 const MAX_KILLS = 15;
 const RESPAWN_TIME = 3;
