@@ -64,10 +64,10 @@ files. Keep production credentials in the hosting provider dashboard.
 
 ## Structure
 
-- `index.html` - page content and sections
-- `styles.css` - responsive arcade UI styling
-- `script.js` - playable placeholder games, local lobby, and score interactions
-- `games/nomaefps/` - attached FPS game source and launcher page
+- `index.html` - redirect entry that forwards visitors to the shooter URL
+- `games/nomaefps/index.html` - primary playable KRUNK BLOCK shooter client
+- `games/nomaefps/source/client` - React/Three multiplayer client source
+- `games/nomaefps/source/server` - authoritative WebSocket game server source
 
 
 ## Multiplayer plan (NomaeFPS)
