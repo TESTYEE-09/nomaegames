@@ -257,9 +257,22 @@
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
-            startRetroChiptuneTheme();
+            startBackgroundMusic();
         }
 
+
+
+        function startBackgroundMusic() {
+            if (mainMusicNode) return;
+            const music = new Audio('https://cdn.pixabay.com/download/audio/2024/10/10/audio_28d30f42a8.mp3?filename=game-background-loop-uplifting-adventure-music-loop-248804.mp3');
+            music.loop = true;
+            music.volume = 0.22;
+            music.preload = 'auto';
+            music.play().catch(() => {
+                startRetroChiptuneTheme();
+            });
+            mainMusicNode = music;
+        }
         // Procedural 8-Bit chiptune sequencer loop
         function startRetroChiptuneTheme() {
             if (isMusicRunning) return;
@@ -483,7 +496,7 @@
             onGround: false,
             isCrouching: false,
             isAiming: false,
-            speed: 10.0, // Speed in meters per second
+            speed: 13.5, // Speed in meters per second
             momentum: 0,
             slideBoostCooldown: false
         };
@@ -502,6 +515,7 @@
         // Inputs
         const keys = { w: false, a: false, s: false, d: false, shift: false, space: false, c: false };
         const mouse = { x: 0, y: 0, leftPressed: false };
+        const mouseButtons = { primary: false, secondary: false };
         
         // Touch state variables
         let isMobile = false;
@@ -1513,18 +1527,24 @@
 
             window.addEventListener('mousedown', (e) => {
                 if (e.button === 0) {
+                    mouseButtons.primary = true;
                     mouse.leftPressed = true;
                 } else if (e.button === 2) {
+                    mouseButtons.secondary = true;
                     toggleAim(true);
+                    mouse.leftPressed = true;
+                    shootActiveWeapon();
                 }
             });
 
             window.addEventListener('mouseup', (e) => {
                 if (e.button === 0) {
-                    mouse.leftPressed = false;
+                    mouseButtons.primary = false;
                 } else if (e.button === 2) {
+                    mouseButtons.secondary = false;
                     toggleAim(false);
                 }
+                mouse.leftPressed = mouseButtons.primary || mouseButtons.secondary;
             });
 
             window.addEventListener('contextmenu', e => e.preventDefault());
