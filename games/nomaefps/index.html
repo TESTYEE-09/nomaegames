@@ -257,9 +257,22 @@
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
-            startRetroChiptuneTheme();
+            startBackgroundMusic();
         }
 
+
+
+        function startBackgroundMusic() {
+            if (mainMusicNode) return;
+            const music = new Audio('https://cdn.pixabay.com/download/audio/2024/10/10/audio_28d30f42a8.mp3?filename=game-background-loop-uplifting-adventure-music-loop-248804.mp3');
+            music.loop = true;
+            music.volume = 0.22;
+            music.preload = 'auto';
+            music.play().catch(() => {
+                startRetroChiptuneTheme();
+            });
+            mainMusicNode = music;
+        }
         // Procedural 8-Bit chiptune sequencer loop
         function startRetroChiptuneTheme() {
             if (isMusicRunning) return;
@@ -483,9 +496,11 @@
             onGround: false,
             isCrouching: false,
             isAiming: false,
-            speed: 10.0, // Speed in meters per second
+            speed: 13.5, // Speed in meters per second
             momentum: 0,
-            slideBoostCooldown: false
+            slideBoostCooldown: false,
+            coyoteTimer: 0,
+            jumpBufferTimer: 0
         };
 
         // Environment list for collisions
@@ -494,13 +509,27 @@
         let particles = [];
         let damageIndicators = [];
 
+        // Multiplayer groundwork (client state + network tick placeholders)
+        const net = {
+            enabled: false,
+            serverUrl: 'ws://localhost:3001',
+            roomCode: '',
+            playerName: 'Player',
+            tickRate: 20,
+            lastSentAt: 0
+        };
+
         // Camera control multipliers
-        const SENSITIVITY_DESKTOP = 0.0022;
-        const SENSITIVITY_MOBILE = 0.0065;
+        const SENSITIVITY_DESKTOP = 0.002;
+        const SENSITIVITY_TRACKPAD = 0.0013;
+        const SENSITIVITY_MOBILE = 0.0055;
+        const COYOTE_TIME = 0.14;
+        const JUMP_BUFFER_TIME = 0.12;
 
         // Inputs
         const keys = { w: false, a: false, s: false, d: false, shift: false, space: false, c: false };
         const mouse = { x: 0, y: 0, leftPressed: false };
+        const mouseButtons = { primary: false, secondary: false };
         
         // Touch state variables
         let isMobile = false;
@@ -1311,6 +1340,9 @@
         function updatePlayerPhysics(delta) {
             const d = Math.min(0.1, delta);
 
+            player.jumpBufferTimer = Math.max(0, player.jumpBufferTimer - d);
+            player.coyoteTimer = Math.max(0, player.coyoteTimer - d);
+
             if (!player.onGround) {
                 player.velocity.y -= 25.0 * d;
             }
@@ -1372,11 +1404,20 @@
             const checkYPos = new THREE.Vector3(player.position.x, stepY, player.position.z);
             if (!checkCollisions(checkYPos, false)) {
                 player.position.y = stepY;
+                if (player.onGround) player.coyoteTimer = COYOTE_TIME;
                 player.onGround = false;
             } else {
                 if (player.velocity.y < 0) {
                     player.onGround = true;
+                    player.coyoteTimer = 0;
                     player.slideBoostCooldown = false;
+
+                    if (player.jumpBufferTimer > 0) {
+                        player.jumpBufferTimer = 0;
+                        player.velocity.y = 10.8;
+                        player.onGround = false;
+                        playSynthSound('jump');
+                    }
                     
                     const gy = getGroundY(player.position);
                     player.position.y = gy; // Snap elevation
@@ -1401,7 +1442,7 @@
                 
                 const horizontalVel = Math.abs(player.velocity.x) + Math.abs(player.velocity.z);
                 if (horizontalVel > 0.05 && !player.slideBoostCooldown) {
-                    player.momentum = 0.25;
+                    player.momentum = 0.36;
                     playSynthSound('slide');
                     player.slideBoostCooldown = true;
 
@@ -1414,15 +1455,21 @@
         }
 
         function triggerJump() {
-            if (player.onGround) {
-                player.velocity.y = 9.8;
-                player.onGround = false;
-                playSynthSound('jump');
+            player.jumpBufferTimer = JUMP_BUFFER_TIME;
 
-                if (player.isCrouching) {
-                    player.momentum = Math.min(0.4, player.momentum + 0.08);
-                    triggerCrouch(false);
-                }
+            const canJump = player.onGround || player.coyoteTimer > 0;
+            if (!canJump) return;
+
+            player.jumpBufferTimer = 0;
+            player.coyoteTimer = 0;
+            player.velocity.y = 10.8;
+            player.onGround = false;
+            playSynthSound('jump');
+
+            if (player.isCrouching) {
+                // Crouch -> jump combo burst
+                player.momentum = Math.min(0.7, player.momentum + 0.22);
+                triggerCrouch(false);
             }
         }
 
@@ -1460,6 +1507,18 @@
         function initControls() {
             checkMobile();
 
+            const clampPitch = () => {
+                player.pitch = Math.max(-Math.PI / 2.1, Math.min(Math.PI / 2.1, player.pitch));
+            };
+
+            const applyLookDelta = (dx, dy, sensitivity) => {
+                player.yaw -= dx * sensitivity;
+                player.pitch -= dy * sensitivity;
+                clampPitch();
+                camera.rotation.y = player.yaw;
+                camera.rotation.x = player.pitch;
+            };
+
             // Keyboard Mapping
             window.addEventListener('keydown', (e) => {
                 const key = e.key.toLowerCase();
@@ -1494,32 +1553,34 @@
 
             document.addEventListener('mousemove', (e) => {
                 if (document.pointerLockElement === canvas) {
-                    player.yaw -= e.movementX * SENSITIVITY_DESKTOP;
-                    player.pitch -= e.movementY * SENSITIVITY_DESKTOP;
-                    player.pitch = Math.max(-Math.PI/2.1, Math.min(Math.PI/2.1, player.pitch));
-
-                    camera.rotation.y = player.yaw;
-                    camera.rotation.x = player.pitch;
+                    applyLookDelta(e.movementX, e.movementY, SENSITIVITY_DESKTOP);
                 }
             });
 
             window.addEventListener('mousedown', (e) => {
                 if (e.button === 0) {
+                    mouseButtons.primary = true;
                     mouse.leftPressed = true;
                 } else if (e.button === 2) {
+                    mouseButtons.secondary = true;
                     toggleAim(true);
+                    mouse.leftPressed = true;
+                    shootActiveWeapon();
                 }
             });
 
             window.addEventListener('mouseup', (e) => {
                 if (e.button === 0) {
-                    mouse.leftPressed = false;
+                    mouseButtons.primary = false;
                 } else if (e.button === 2) {
+                    mouseButtons.secondary = false;
                     toggleAim(false);
                 }
+                mouse.leftPressed = mouseButtons.primary || mouseButtons.secondary;
             });
 
             window.addEventListener('contextmenu', e => e.preventDefault());
+
 
             // --- DRAG TO LOOK FALLBACK ---
             let isDraggingMouseLook = false;
@@ -1538,12 +1599,7 @@
                     const movementX = e.clientX - mouseLookLast.x;
                     const movementY = e.clientY - mouseLookLast.y;
 
-                    player.yaw -= movementX * SENSITIVITY_DESKTOP * 1.5;
-                    player.pitch -= movementY * SENSITIVITY_DESKTOP * 1.5;
-                    player.pitch = Math.max(-Math.PI/2.1, Math.min(Math.PI/2.1, player.pitch));
-
-                    camera.rotation.y = player.yaw;
-                    camera.rotation.x = player.pitch;
+                    applyLookDelta(movementX, movementY, SENSITIVITY_TRACKPAD);
 
                     mouseLookLast.x = e.clientX;
                     mouseLookLast.y = e.clientY;
@@ -1553,6 +1609,20 @@
             window.addEventListener('mouseup', () => {
                 isDraggingMouseLook = false;
             });
+
+
+            // Two-finger trackpad look fallback
+            window.addEventListener('wheel', (e) => {
+                if (!menuOverlay.classList.contains('hidden')) return;
+                if (document.pointerLockElement === canvas) return;
+                if (isMobile) return;
+
+                if (Math.abs(e.deltaX) > 0 || Math.abs(e.deltaY) > 0) {
+                    e.preventDefault();
+                    const scale = e.deltaMode === 1 ? 14 : 1;
+                    applyLookDelta(e.deltaX * scale, e.deltaY * scale, SENSITIVITY_TRACKPAD * 0.55);
+                }
+            }, { passive: false });
 
             // --- MULTI-TOUCH JOYSTICK & LOOK TRACKPAD ---
             const joyZone = document.getElementById('joystick-zone');
@@ -1627,12 +1697,7 @@
                         const movementX = touch.clientX - touchLookLast.x;
                         const movementY = touch.clientY - touchLookLast.y;
 
-                        player.yaw -= movementX * SENSITIVITY_MOBILE;
-                        player.pitch -= movementY * SENSITIVITY_MOBILE;
-                        player.pitch = Math.max(-Math.PI/2.1, Math.min(Math.PI/2.1, player.pitch));
-
-                        camera.rotation.y = player.yaw;
-                        camera.rotation.x = player.pitch;
+                        applyLookDelta(movementX, movementY, SENSITIVITY_MOBILE);
 
                         touchLookLast.x = touch.clientX;
                         touchLookLast.y = touch.clientY;
@@ -1670,6 +1735,9 @@
             });
             mBtnShoot.addEventListener('touchend', (e) => {
                 preventTouch(e);
+                mouse.leftPressed = false;
+            });
+            mBtnShoot.addEventListener('touchcancel', () => {
                 mouse.leftPressed = false;
             });
 
