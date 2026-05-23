@@ -3,12 +3,38 @@ import { Player } from './Player.js';
 import type { ClientMessage, ServerMessage, PlayerState, Vector3, RoomConfig, KillFeedEntry } from '../../shared/types.js';
 
 const TICK_RATE = 60;
-const MAX_PLAYERS = 8;
+const MAX_PLAYERS = 32;
 const GAME_DURATION = 600;
 const MAX_KILLS = 15;
 const RESPAWN_TIME = 3;
 const PLAYER_RADIUS = 0.5;
 const MAP_BOUNDS = { minX: -50, maxX: 50, minZ: -50, maxZ: 50 };
+
+
+type Obstacle = {
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+  minZ: number;
+  maxZ: number;
+};
+
+const MAP_OBSTACLES: Obstacle[] = [
+  { minX: -10, maxX: 10, minY: 0, maxY: 2.1, minZ: -10, maxZ: 10 },
+  { minX: -16.5, maxX: -13.5, minY: 0, maxY: 3, minZ: -16.5, maxZ: -13.5 },
+  { minX: 13.5, maxX: 16.5, minY: 0, maxY: 3, minZ: -16.5, maxZ: -13.5 },
+  { minX: -16.5, maxX: -13.5, minY: 0, maxY: 3, minZ: 13.5, maxZ: 16.5 },
+  { minX: 13.5, maxX: 16.5, minY: 0, maxY: 3, minZ: 13.5, maxZ: 16.5 },
+  { minX: -9, maxX: -7, minY: 0, maxY: 2, minZ: -9, maxZ: -7 },
+  { minX: 7, maxX: 9, minY: 0, maxY: 2, minZ: -9, maxZ: -7 },
+  { minX: -9, maxX: -7, minY: 0, maxY: 2, minZ: 7, maxZ: 9 },
+  { minX: 7, maxX: 9, minY: 0, maxY: 2, minZ: 7, maxZ: 9 },
+  { minX: -25.25, maxX: -24.75, minY: 0, maxY: 1.5, minZ: -4, maxZ: 4 },
+  { minX: 24.75, maxX: 25.25, minY: 0, maxY: 1.5, minZ: -4, maxZ: 4 },
+  { minX: -4, maxX: 4, minY: 0, maxY: 1.5, minZ: -25.25, maxZ: -24.75 },
+  { minX: -4, maxX: 4, minY: 0, maxY: 1.5, minZ: 24.75, maxZ: 25.25 }
+];
 
 export class GameRoom {
   code: string;
@@ -135,6 +161,8 @@ export class GameRoom {
 
       if (horizontalDist > PLAYER_RADIUS) continue;
 
+      if (this.isLineOfSightBlocked(origin, target.position)) continue;
+
       const dy = closest.y - target.position.y;
       const isHeadshot = Math.abs(dy - headY) < 0.25;
       const isBody = Math.abs(dy - bodyY) < 0.6;
@@ -217,6 +245,42 @@ export class GameRoom {
     }, shooterId);
   }
 
+
+
+  private isLineOfSightBlocked(origin: Vector3, target: Vector3): boolean {
+    const dx = target.x - origin.x;
+    const dy = target.y - origin.y;
+    const dz = target.z - origin.z;
+
+    for (const obstacle of MAP_OBSTACLES) {
+      let tMin = 0;
+      let tMax = 1;
+
+      const intersectsAxis = (start: number, delta: number, min: number, max: number) => {
+        if (Math.abs(delta) < 0.000001) {
+          return start >= min && start <= max;
+        }
+
+        const inv = 1 / delta;
+        let t1 = (min - start) * inv;
+        let t2 = (max - start) * inv;
+        if (t1 > t2) [t1, t2] = [t2, t1];
+        tMin = Math.max(tMin, t1);
+        tMax = Math.min(tMax, t2);
+        return tMin <= tMax;
+      };
+
+      if (!intersectsAxis(origin.x, dx, obstacle.minX, obstacle.maxX)) continue;
+      if (!intersectsAxis(origin.y, dy, obstacle.minY, obstacle.maxY)) continue;
+      if (!intersectsAxis(origin.z, dz, obstacle.minZ, obstacle.maxZ)) continue;
+
+      if (tMax >= 0 && tMin <= 1) {
+        return true;
+      }
+    }
+
+    return false;
+  }
   private getHitDirection(targetPos: Vector3, origin: Vector3): Vector3 {
     return {
       x: origin.x - targetPos.x,
