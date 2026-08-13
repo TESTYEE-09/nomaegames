@@ -213,6 +213,7 @@ function requestLock() {
 // window resize event, so reconcile the drawing buffer every frame instead.
 function syncSize() {
   const w = innerWidth, h = innerHeight;
+  if (w < 1 || h < 1) return; // hidden/unlaid-out host: keep the last good size
   const dpr = Math.min(devicePixelRatio, 2);
   const cw = Math.round(w * dpr), ch = Math.round(h * dpr);
   if (canvas.width === cw && canvas.height === ch) return;
