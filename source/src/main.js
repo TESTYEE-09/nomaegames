@@ -209,11 +209,20 @@ function requestLock() {
   if (p && p.catch) p.catch(() => canvas.requestPointerLock());
 }
 
-addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight;
+// Some hosts (embeds, split panes, mobile chrome bars) resize without firing a
+// window resize event, so reconcile the drawing buffer every frame instead.
+function syncSize() {
+  const w = innerWidth, h = innerHeight;
+  const dpr = Math.min(devicePixelRatio, 2);
+  const cw = Math.round(w * dpr), ch = Math.round(h * dpr);
+  if (canvas.width === cw && canvas.height === ch) return;
+  renderer.setPixelRatio(dpr);
+  renderer.setSize(w, h, true);
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
+}
+addEventListener('resize', syncSize);
+addEventListener('orientationchange', syncSize);
 
 // ---------------------------------------------------------------- weapons
 function selectWeapon(i) {
@@ -775,6 +784,7 @@ let fpsAcc = 0, fpsN = 0, fpsT = 0;
 
 function frame(now) {
   requestAnimationFrame(frame);
+  syncSize();
   let raw = (now - last) / 1000;
   last = now;
   if (raw > 0.1) raw = 0.1;
