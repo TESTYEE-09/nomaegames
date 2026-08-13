@@ -1,98 +1,80 @@
-# Nomae Games
+# NEON BREACH
 
-A browser game project with a direct homepage redirect to the NomaeFPS shooter,
-plus legacy mini-game code and an attached Arena FPS source tree.
+A wave-based arena FPS that runs in the browser. No install, no build step, no
+external assets — the whole game is a single self-contained `index.html`
+(three.js inlined, every sound synthesized at runtime, every texture drawn to a
+canvas on load).
 
-## Run locally
+**Play:** open `index.html`, or visit the GitHub Pages deployment.
 
-Open `index.html` in a browser, or serve the folder with any static file server.
+## The game
 
-## Games
+Survive escalating waves inside a neon grid arena. Every cleared wave offers a
+choice of three augments, so each run builds a different character.
 
-- Reaction Dash - wait for the signal and tap as fast as possible.
-- Memory Grid - repeat the flashing pattern as it grows each round.
-- NomaeFPS - attached Arena FPS source in `games/nomaefps/source`.
+**Controls**
+
+| Input | Action |
+| --- | --- |
+| `W` `A` `S` `D` | Move |
+| Mouse | Look / fire |
+| `Space` | Jump, then double jump |
+| `Shift` | Dash (rechargeable charges) |
+| `Ctrl` | Sprint |
+| `R` | Reload |
+| `1` `2` `3` / `Q` / wheel | Switch weapon |
+| `M` / `P` | Mute / pause |
+
+**Weapons** — Pulse Rifle (full auto), Scattergun (unlocks wave 3), Railgun
+(charge-up, pierces everything, unlocks wave 6).
+
+**Enemies** — Seekers swarm and ram, Spitters keep their distance and lob
+plasma, Wisps blink around the arena firing bursts, Brutes soak damage and hit
+like a truck.
+
+**Augments** — 15 stackable upgrades across three rarities: damage, fire rate,
+crit, lifesteal, regenerating shields, extra dashes and air jumps, and
+detonation cores that make every kill explode.
+
+## Technical notes
+
+- Rendering: three.js r169, PBR materials lit by a procedurally generated
+  environment map, ACES filmic tonemapping, real-time shadows.
+- Physics: hand-rolled swept-AABB character controller with step-up, plus
+  sphere-vs-box resolution for enemies. Hitscan weapons use ray/sphere and
+  ray/AABB tests with separate head hitboxes.
+- Effects: a single GPU-instanced particle system (5k points), instanced debris
+  shards, pooled tracers, shock rings, decals and flash lights — no allocations
+  in the hot loop.
+- Audio: everything is WebAudio synthesis — weapon reports, impacts, UI, and an
+  adaptive synthwave score that gains layers and tempo as waves escalate.
+- Feel: trauma-based screen shake, FOV kick, strafe tilt, landing dip, weapon
+  sway and bob, hit markers, floating damage numbers, combo multiplier, and
+  slow-motion on heavy kills and wave clears.
+
+## Repository layout
+
+```
+index.html      the built, self-contained game (this is what ships)
+source/         the readable source
+  src/          game modules (arena, player, weapons, enemies, fx, ui, audio)
+  vendor/       three.js
+  index.html    dev shell (loads src/ via importmap)
+  build.mjs     bundles source/ into the root index.html
+  serve.mjs     no-cache static server for local development
+```
+
+## Development
+
+```bash
+cd source
+node serve.mjs          # http://localhost:5178
+node build.mjs ../index.html   # rebuild the shipped single-file build
+```
+
+`build.mjs` needs esbuild (`npm i --no-save esbuild`).
 
 ## Deploy
 
-This project has no build step. It can be deployed to GitHub Pages, Netlify,
-Vercel, Cloudflare Pages, or any static host by publishing the repository root.
-
-## Recommended free hosting
-
-Use GitHub Pages for the website:
-
-1. Open the repository settings on GitHub.
-2. Go to Pages.
-3. Set the source to `Deploy from a branch`.
-4. Pick `main` and `/root`.
-5. Save.
-
-Use Firebase Spark plan for multiplayer:
-
-- Anonymous Authentication for player sessions.
-- Realtime Database for rooms, player presence, and score sync.
-- Security rules that only let players write to their own room/player record.
-
-This keeps the frontend free and static while still allowing live multiplayer.
-If games later need authoritative low-latency server logic, move those specific
-games to Cloudflare Pages plus Durable Objects.
-
-Suggested Firebase data shape:
-
-```json
-{
-  "rooms": {
-    "ABCD": {
-      "game": "Reaction Dash",
-      "status": "waiting",
-      "players": {
-        "uid_1": { "name": "Nomae", "score": 0, "online": true }
-      }
-    }
-  },
-  "leaderboards": {
-    "reaction-dash": {
-      "uid_1": { "name": "Nomae", "score": 9820 }
-    }
-  }
-}
-```
-
-Do not commit real Firebase config, private keys, API secrets, or local `.env`
-files. Keep production credentials in the hosting provider dashboard.
-
-## Structure
-
-- `index.html` - redirect entry that forwards visitors to the shooter URL
-- `games/nomaefps/index.html` - primary playable KRUNK BLOCK shooter client
-- `games/nomaefps/source/client` - React/Three multiplayer client source
-- `games/nomaefps/source/server` - authoritative WebSocket game server source
-
-
-## Multiplayer plan (NomaeFPS)
-
-1. **Networking model (authoritative server)**
-   - Keep server-authoritative hit validation and movement reconciliation in `games/nomaefps/source/server`.
-   - Move projectile, cooldown, reload, and health truth entirely server-side.
-
-2. **Matchmaking + rooms**
-   - Add quick-play queue plus private room codes.
-   - Keep room metadata in Firebase (or Redis) and hand active matches to Node room workers.
-
-3. **Tick/state protocol**
-   - Ship compact snapshot deltas at 20–30 Hz with interpolation buffers client-side.
-   - Keep full server simulation at 60 Hz for hit precision.
-
-4. **Anti-cheat + fairness**
-   - Validate fire-rate, angle deltas, movement caps, and impossible jumps on server.
-   - Add lag compensation window for hitscan so high-ping users can still register valid shots.
-
-5. **Scale + deployment**
-   - Start with one regional server, then add region selection (NA/EU/AP).
-   - Add health checks, room autoscaling, and crash-safe room handoff.
-
-6. **Roadmap milestones**
-   - Milestone 1: 1v1 private rooms + scoreboard + reconnect.
-   - Milestone 2: 4–8 player public queue + map rotation.
-   - Milestone 3: party system + ranked ladder + seasonal stats.
+Static — publish the repository root anywhere. The included GitHub Actions
+workflow deploys to GitHub Pages on every push to `main`.
